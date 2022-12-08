@@ -1,7 +1,6 @@
 package com.reservation_restaurants_service.service;
 
 import com.reservation_restaurants_service.dto.ReservationDto;
-import com.reservation_restaurants_service.entity.Reservation;
 import com.reservation_restaurants_service.exception.ReservationNotFoundException;
 import com.reservation_restaurants_service.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -19,13 +18,13 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public Reservation save(Reservation reservation) {
-        reservationRepository.save(reservation);
-        return reservation;
+    public ReservationDto save(ReservationDto reservationDto) {
+        reservationRepository.save(reservationDto);
+        return reservationDto;
     }
 
-    public Reservation findReservationById(Long id) {
-        Optional<Reservation> reservationById = reservationRepository.findById(id);
+    public ReservationDto findReservationById(Long id) {
+        Optional<ReservationDto> reservationById = reservationRepository.findById(id);
         if (reservationById.isPresent()) {
             return reservationById.get();
         } else {
@@ -33,21 +32,21 @@ public class ReservationService {
         }
     }
 
-    public List<Reservation> findAllReservations() {
+    public List<ReservationDto> findAllReservations() {
         return reservationRepository.findAll();
     }
 
-    public Reservation update(ReservationDto reservationDto) {
-        Reservation editedReservation = findReservationById(reservationDto.getId());
+    public ReservationDto update(ReservationDto reservationDto) {
+        ReservationDto editedReservation = findReservationById(reservationDto.getId());
         editedReservation.setRestaurantName(reservationDto.getRestaurantName());
         editedReservation.setGuests(reservationDto.getGuests());
         editedReservation.setCreationTime(reservationDto.getCreationTime());
-        //сохранение?
+        save(editedReservation);
         return editedReservation;
     }
 
     public void delete(Long id) {
-        Optional<Reservation> reservationById = reservationRepository.findById(id);
+        Optional<ReservationDto> reservationById = reservationRepository.findById(id);
         if (reservationById.isPresent()) {
             reservationRepository.delete(reservationById.get());
         } else {

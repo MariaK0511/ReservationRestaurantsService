@@ -2,7 +2,6 @@ package com.reservation_restaurants_service.controller;
 
 
 import com.reservation_restaurants_service.dto.UserDto;
-import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,34 +21,33 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<User> save(@RequestBody User user) {
-        // dto
-        User saveUser = userService.save(user);
+    public ResponseEntity<UserDto> save(@RequestBody UserDto userDto) {
+        UserDto saveUser = userService.save(userDto);
         return ok(saveUser);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> findById(@PathVariable("userId") Long userId) {
-        User userById = userService.findUserById(userId);
+    public ResponseEntity<UserDto> findById(@PathVariable("userId") Long userId) {
+        UserDto userById = userService.findUserById(userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> findAll() {
-        List<User> users = userService.findAllUsers();
+    public ResponseEntity<List<UserDto>> findAll() {
+        List<UserDto> users = userService.findAllUsers();
         return ok(users);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<User> update(@PathVariable("userId") Long userId,
-                                       @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable("userId") Long userId,
+                                          @RequestBody UserDto userDto) {
         userDto.setId(userId);
-        User user = userService.update(userDto);
+        UserDto user = userService.update(userDto);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<User> deleteUser(@PathVariable("userId") Long userId) {
+    public ResponseEntity<UserDto> deleteUser(@PathVariable("userId") Long userId) {
         userService.delete(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

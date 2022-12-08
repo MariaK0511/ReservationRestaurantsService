@@ -1,7 +1,6 @@
 package com.reservation_restaurants_service.service;
 
 import com.reservation_restaurants_service.dto.UserDto;
-import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.exception.UserNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,13 +26,13 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public User save(User user) {
-        userRepository.save(user);
-        return user;
+    public UserDto save(UserDto userDto) {
+        userRepository.save(userDto);
+        return userDto;
     }
 
-    public User findUserById(Long id) {
-        Optional<User> userById = userRepository.findById(id);
+    public UserDto findUserById(Long id) {
+        Optional<UserDto> userById = userRepository.findById(id);
         if (userById.isPresent()) {
             return userById.get();
         } else {
@@ -41,23 +40,23 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public List<User> findAllUsers() {
+    public List<UserDto> findAllUsers() {
         return userRepository.findAll();
     }
 
-    public User update(UserDto userDto) {
-        User editedUser = findUserById(userDto.getId());
+    public UserDto update(UserDto userDto) {
+        UserDto editedUser = findUserById(userDto.getId());
         editedUser.setName(userDto.getName());
         editedUser.setSurname(userDto.getSurname());
         editedUser.setEmail(userDto.getEmail());
         editedUser.setPassword(userDto.getPassword());
         editedUser.setPhoneNumber(userDto.getPhoneNumber());
-        // где сейв
+        save(editedUser);
         return editedUser;
     }
 
     public void delete(Long id) {
-        Optional<User> userById = userRepository.findById(id);
+        Optional<UserDto> userById = userRepository.findById(id);
         if (userById.isPresent()) {
             userRepository.delete(userById.get());
         } else {

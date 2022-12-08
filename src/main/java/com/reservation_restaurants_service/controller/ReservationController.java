@@ -22,34 +22,33 @@ public class ReservationController {
     }
 
     @PostMapping()
-    public ResponseEntity<Reservation> save(@RequestBody Reservation reservation) {
-        //перевести запрос и ответ на дто тип резервации
-        Reservation saveReservation = reservationService.save(reservation);
+    public ResponseEntity<ReservationDto> save(@RequestBody ReservationDto reservationDto) {
+        ReservationDto saveReservation = reservationService.save(reservationDto);
         return ok(saveReservation);
     }
 
     @GetMapping("/{reservationId}")
-    public ResponseEntity<Reservation> findById(@PathVariable("reservationId") Long reservationId) {
-        Reservation reservationById = reservationService.findReservationById(reservationId);
+    public ResponseEntity<ReservationDto> findById(@PathVariable("reservationId") Long reservationId) {
+        ReservationDto reservationById = reservationService.findReservationById(reservationId);
         return new ResponseEntity<>(reservationById, OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Reservation>> findAll() {
-        List<Reservation> reservations = reservationService.findAllReservations();
+    public ResponseEntity<List<ReservationDto>> findAll() {
+        List<ReservationDto> reservations = reservationService.findAllReservations();
         return ok(reservations);
     }
 
     @PutMapping("/{reservationId}")
-    public ResponseEntity<Reservation> update(@PathVariable("reservationId") Long reservationId,
+    public ResponseEntity<ReservationDto> update(@PathVariable("reservationId") Long reservationId,
                                               @RequestBody ReservationDto reservationDto) {
         reservationDto.setId(reservationId);
-        Reservation reservation = reservationService.update(reservationDto);
+        ReservationDto reservation = reservationService.update(reservationDto);
         return new ResponseEntity<>(reservation, OK);
     }
 
     @DeleteMapping("/{reservationId}")
-    public ResponseEntity<User> deleteUser(@PathVariable("reservationId") Long reservationId) {
+    public ResponseEntity<ReservationDto> deleteUser(@PathVariable("reservationId") Long reservationId) {
         reservationService.delete(reservationId);
         return new ResponseEntity<>(OK);
     }

@@ -21,34 +21,33 @@ public class RestaurantController {
     }
 
     @PostMapping()
-    public ResponseEntity<Restaurant> save(@RequestBody Restaurant restaurant) {
-        //где дто
-        Restaurant saveRestaurant = restaurantService.save(restaurant);
+    public ResponseEntity<RestaurantDto> save(@RequestBody RestaurantDto restaurantDto) {
+        RestaurantDto saveRestaurant = restaurantService.save(restaurantDto);
         return ok(saveRestaurant);
     }
 
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<Restaurant> findById(@PathVariable("restaurantId") Long restaurantId) {
-        Restaurant restaurantById = restaurantService.findRestaurantById(restaurantId);
+    public ResponseEntity<RestaurantDto> findById(@PathVariable("restaurantId") Long restaurantId) {
+        RestaurantDto restaurantById = restaurantService.findRestaurantById(restaurantId);
         return new ResponseEntity<>(restaurantById, HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Restaurant>> findAll() {
-       List<Restaurant> restaurants = restaurantService.findAllRestaurants();
+    public ResponseEntity<List<RestaurantDto>> findAll() {
+       List<RestaurantDto> restaurants = restaurantService.findAllRestaurants();
         return ok(restaurants);
     }
 
     @PutMapping("/{restaurantId}")
-    public ResponseEntity<Restaurant> update(@PathVariable("restaurantId") Long restaurantId,
+    public ResponseEntity<RestaurantDto> update(@PathVariable("restaurantId") Long restaurantId,
                                              @RequestBody RestaurantDto restaurantDto) {
         restaurantDto.setId(restaurantId);
-        Restaurant restaurant = restaurantService.update(restaurantDto);
+        RestaurantDto restaurant = restaurantService.update(restaurantDto);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 
     @DeleteMapping("/{restaurantId}")
-    public ResponseEntity<Restaurant> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
+    public ResponseEntity<RestaurantDto> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
         restaurantService.delete(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

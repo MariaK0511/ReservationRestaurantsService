@@ -7,7 +7,6 @@ import com.reservation_restaurants_service.exception.RestaurantNotFoundException
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -20,35 +19,35 @@ public class RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Restaurant save(Restaurant restaurant) {
-        restaurantRepository.save(restaurant);
-        return restaurant;
+    public RestaurantDto save(RestaurantDto restaurantDto) {
+        restaurantRepository.save(restaurantDto);
+        return restaurantDto;
     }
 
-    public Restaurant findRestaurantById(Long id) {
-        Optional<Restaurant> restaurantById = restaurantRepository.findById(id);
+    public RestaurantDto findRestaurantById(Long id) {
+        Optional<RestaurantDto> restaurantById = restaurantRepository.findById(id);
         if (restaurantById.isPresent()) {
             return restaurantById.get();
         } else throw new RestaurantNotFoundException();
     }
 
-    public List<Restaurant> findAllRestaurants() {
+    public List<RestaurantDto> findAllRestaurants() {
         return restaurantRepository.findAll();
     }
 
-    public Restaurant update(RestaurantDto restaurantDto) {
-        Restaurant editedRestaurant = findRestaurantById(restaurantDto.getId());
+    public RestaurantDto update(RestaurantDto restaurantDto) {
+        RestaurantDto editedRestaurant = findRestaurantById(restaurantDto.getId());
         editedRestaurant.setName(restaurantDto.getName());
         editedRestaurant.setAddress(restaurantDto.getAddress());
         editedRestaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
         editedRestaurant.setRating(restaurantDto.getRating());
-        // где сейв
+        save(editedRestaurant);
         // добавить маперы, чтобы не писать гетеры и сетторы
         return editedRestaurant;
     }
 
     public void delete(Long id) {
-        Optional<Restaurant> restaurantById = restaurantRepository.findById(id);
+        Optional<RestaurantDto> restaurantById = restaurantRepository.findById(id);
         if (restaurantById.isPresent()) {
             restaurantRepository.delete(restaurantById.get());
         } else {
