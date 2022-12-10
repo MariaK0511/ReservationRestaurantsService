@@ -5,49 +5,54 @@ import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.exception.ReservationNotFoundException;
 import com.reservation_restaurants_service.exception.RestaurantNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
+import com.reservation_restaurants_service.service.mapper.RestaurantMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantMapper restaurantMapper;
 
-    public RestaurantService(RestaurantRepository restaurantRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper) {
         this.restaurantRepository = restaurantRepository;
+        this.restaurantMapper = restaurantMapper;
     }
 
     public RestaurantDto save(RestaurantDto restaurantDto) {
-        restaurantRepository.save(restaurantDto);
-        return restaurantDto;
+        Restaurant restaurant = restaurantMapper.convertRestaurantDtoToRestaurant(restaurantDto);
+        restaurantRepository.save(restaurant);
+        return restaurantMapper.convertRestaurantToRestaurantDto(restaurant);
     }
 
     public RestaurantDto findRestaurantById(Long id) {
-        Optional<RestaurantDto> restaurantById = restaurantRepository.findById(id);
+        Optional<Restaurant> restaurantById = restaurantRepository.findById(id);
         if (restaurantById.isPresent()) {
-            return restaurantById.get();
+            return restaurantMapper.convertRestaurantToRestaurantDto(restaurantById.get());
         } else throw new RestaurantNotFoundException();
     }
 
     public List<RestaurantDto> findAllRestaurants() {
-        return restaurantRepository.findAll();
+        return restaurantRepository.findAll()
+                .stream()
+                .map(restaurantMapper::convertRestaurantToRestaurantDto)
+                .collect(Collectors.toList());
     }
 
-    public RestaurantDto update(RestaurantDto restaurantDto) {
-        RestaurantDto editedRestaurant = findRestaurantById(restaurantDto.getId());
-        editedRestaurant.setName(restaurantDto.getName());
-        editedRestaurant.setAddress(restaurantDto.getAddress());
-        editedRestaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
-        editedRestaurant.setRating(restaurantDto.getRating());
-        save(editedRestaurant);
-        // добавить маперы, чтобы не писать гетеры и сетторы
-        return editedRestaurant;
+    public RestaurantDto update(RestaurantDto incomeRestaurantDto) {
+        RestaurantDto savedRestaurantDto = findRestaurantById(incomeRestaurantDto.getId());
+        savedRestaurantDto = restaurantMapper.convertRestaurantDtoToRestaurantDto(incomeRestaurantDto, savedRestaurantDto);
+        save(savedRestaurantDto);
+        return savedRestaurantDto;
     }
 
     public void delete(Long id) {
-        Optional<RestaurantDto> restaurantById = restaurantRepository.findById(id);
+        Optional<Restaurant> restaurantById = restaurantRepository.findById(id);
         if (restaurantById.isPresent()) {
             restaurantRepository.delete(restaurantById.get());
         } else {

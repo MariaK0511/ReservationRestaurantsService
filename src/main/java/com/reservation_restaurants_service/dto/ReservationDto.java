@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationDto {
     private long id;
-    private String restaurantName;
+    private RestaurantDto restaurantDto;
     private LocalDateTime creationTime;
     private long guests;
 }
