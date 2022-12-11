@@ -1,7 +1,9 @@
 package com.reservation_restaurants_service.entity;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import java.util.List;
 @Table(name = "restaurants")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +23,4 @@ public class Restaurant {
     private String address;
     private long phoneNumber;
     private double rating;
-    @OneToMany
-    List<Reservation> reservations;
 }

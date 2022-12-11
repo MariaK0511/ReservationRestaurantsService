@@ -18,8 +18,8 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    //мени ту оне к ресторанам
-    private String restaurantName;
+    @ManyToOne
+    Restaurant restaurant;
     private LocalDateTime creationTime;
     private long guests;
     @ManyToOne
