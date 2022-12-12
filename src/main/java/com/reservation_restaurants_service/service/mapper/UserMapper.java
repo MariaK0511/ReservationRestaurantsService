@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     public User convertUserDtoToUser(UserDto userDto) {
         return new User(userDto.getId(),
-                userDto.getName(),
+                userDto.getUsername(),
                 userDto.getSurname(),
                 userDto.getNickname(),
                 userDto.getEmail(),
                 userDto.getPassword(),
-                userDto.getPhoneNumber(), null);
+                userDto.getPhoneNumber(), null, null, null);
     }
 
     public UserDto convertUserToUserDto(User user) {
         return new UserDto(user.getId(),
-                user.getName(),
+                user.getUsername(),
                 user.getSurname(),
                 user.getNickname(),
                 user.getEmail(),
@@ -27,7 +27,7 @@ public class UserMapper {
     }
 
     public UserDto convertUserDtoToUserDto(UserDto incomeUserDto, UserDto savedUserDto) {
-        savedUserDto.setName(incomeUserDto.getName());
+        savedUserDto.setUsername(incomeUserDto.getUsername());
         savedUserDto.setSurname(incomeUserDto.getSurname());
         savedUserDto.setNickname(incomeUserDto.getNickname());
         savedUserDto.setPassword(incomeUserDto.getPassword());

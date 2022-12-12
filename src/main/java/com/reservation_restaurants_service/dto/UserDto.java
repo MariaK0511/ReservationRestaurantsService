@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class UserDto {
     private long id;
     @NotBlank(message = "Field cannot be empty")
-    private String name;
+    private String username;
     @NotBlank(message = "Field cannot be empty")
     private String surname;
     @NotBlank(message = "Field cannot be empty")
