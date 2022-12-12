@@ -8,15 +8,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private String username;
     private String surname;
     private String nickname;
     private String email;
@@ -24,4 +23,10 @@ public class User {
     private long phoneNumber;
     @OneToMany
     List<Reservation> reservations;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Role> roleList;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
