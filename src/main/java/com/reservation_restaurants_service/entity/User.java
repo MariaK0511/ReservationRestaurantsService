@@ -17,7 +17,9 @@ public class User {
     private long id;
     private String username;
     private String surname;
+    @Column(unique = true)
     private String nickname;
+    @Column(unique = true)
     private String email;
     private String password;
     private long phoneNumber;
