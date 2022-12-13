@@ -51,4 +51,6 @@ public class RestaurantController {
         restaurantService.delete(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 }

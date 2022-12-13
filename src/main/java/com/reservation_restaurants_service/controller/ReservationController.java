@@ -13,7 +13,6 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -21,35 +20,43 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping()
-    public ResponseEntity<ReservationDto> save(@RequestBody ReservationDto reservationDto) {
-        ReservationDto saveReservation = reservationService.save(reservationDto);
+    @PostMapping("restaurant/{restaurantId}/reservation")
+    public ResponseEntity<ReservationDto> save(@RequestBody ReservationDto reservationDto,
+                                               @PathVariable("restaurantId")long restaurantId) {
+        ReservationDto saveReservation = reservationService.save(reservationDto, restaurantId);
         return ok(saveReservation);
     }
 
-    @GetMapping("/{reservationId}")
+    @GetMapping("restaurant/{reservationId}")
     public ResponseEntity<ReservationDto> findById(@PathVariable("reservationId") Long reservationId) {
         ReservationDto reservationById = reservationService.findReservationById(reservationId);
         return new ResponseEntity<>(reservationById, OK);
     }
 
-    @GetMapping()
+    @GetMapping("restaurant/reservations")
     public ResponseEntity<List<ReservationDto>> findAll() {
         List<ReservationDto> reservations = reservationService.findAllReservations();
         return ok(reservations);
     }
 
-    @PutMapping("/{reservationId}")
+    @PutMapping("restaurant/{reservationId}")
     public ResponseEntity<ReservationDto> update(@PathVariable("reservationId") Long reservationId,
                                               @RequestBody ReservationDto reservationDto) {
         reservationDto.setId(reservationId);
-        ReservationDto reservation = reservationService.update(reservationDto);
+        ReservationDto reservation = reservationService.update(reservationDto,reservationId);
         return new ResponseEntity<>(reservation, OK);
     }
 
-    @DeleteMapping("/{reservationId}")
-    public ResponseEntity<ReservationDto> deleteUser(@PathVariable("reservationId") Long reservationId) {
+    @DeleteMapping("restaurant/{reservationId}")
+    public ResponseEntity<ReservationDto> deleteReservation(@PathVariable("reservationId") Long reservationId) {
         reservationService.delete(reservationId);
+        return new ResponseEntity<>(OK);
+    }
+
+    @PostMapping("restaurant/{reservationId}")
+    public ResponseEntity<ReservationDto> addReservationToUser(@PathVariable("reservationId") Long reservationId,
+                                                               @RequestBody ReservationDto reservationDto){
+        reservationService.addReservationToUser(reservationDto,reservationId);
         return new ResponseEntity<>(OK);
     }
 }

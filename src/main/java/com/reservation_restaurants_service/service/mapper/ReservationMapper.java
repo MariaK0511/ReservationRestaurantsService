@@ -2,6 +2,8 @@ package com.reservation_restaurants_service.service.mapper;
 
 import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.entity.Reservation;
+import com.reservation_restaurants_service.entity.Restaurant;
+import com.reservation_restaurants_service.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,26 +14,27 @@ public class ReservationMapper {
         this.restaurantMapper = restaurantMapper;
     }
 
-    public Reservation convertReservationDtoToReservation(ReservationDto reservationDto) {
+    public Reservation convertReservationDtoToReservation(ReservationDto reservationDto, Restaurant restaurant, User user) {
         return new Reservation(reservationDto.getId(),
-               restaurantMapper.convertRestaurantDtoToRestaurant(reservationDto.getRestaurantDto()),
+              restaurant,
                 reservationDto.getCreationTime(),
-                reservationDto.getGuests(), null);
+                reservationDto.getGuests(), user);
     }
 
-    public ReservationDto convertReservationToReservationDto(Reservation reservation) {
+
+    public ReservationDto convertReservationToReservationDto(Reservation reservation) { //not finished yet!
         return new ReservationDto(reservation.getId(),
-                restaurantMapper.convertRestaurantToRestaurantDto(reservation.getRestaurant()),
+null, null,
                 reservation.getCreationTime(),
                 reservation.getGuests());
 
     }
 
-    public ReservationDto convertReservationDtoToReservationDto(ReservationDto incomeReservationDto,
-                                                                ReservationDto savedReservationDto) {
-        savedReservationDto.setRestaurantDto(incomeReservationDto.getRestaurantDto());
-        savedReservationDto.setCreationTime(incomeReservationDto.getCreationTime());
-        savedReservationDto.setGuests(incomeReservationDto.getGuests());
-        return savedReservationDto;
-    }
+//    public ReservationDto convertReservationDtoToReservationDto(ReservationDto incomeReservationDto,
+//                                                                ReservationDto savedReservationDto) {
+//        savedReservationDto.setRestaurantDto(incomeReservationDto.getRestaurantDto());
+//        savedReservationDto.setCreationTime(incomeReservationDto.getCreationTime());
+//        savedReservationDto.setGuests(incomeReservationDto.getGuests());
+//        return savedReservationDto;
+//    }
 }
