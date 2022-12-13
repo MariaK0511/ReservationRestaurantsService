@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional // а нужна ли она?
+@Transactional
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -43,7 +43,6 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
-
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User with username: " + email + "not found");
         }
