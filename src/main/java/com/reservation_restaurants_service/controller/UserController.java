@@ -1,8 +1,10 @@
 package com.reservation_restaurants_service.controller;
 
 
-import com.reservation_restaurants_service.configuration.jwt.JwtProvider;
+
+import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.dto.UserDto;
+import com.reservation_restaurants_service.service.ReservationService;
 import com.reservation_restaurants_service.service.UserService;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
@@ -17,13 +19,13 @@ import static org.springframework.http.ResponseEntity.ok;
 
 public class UserController {
     private final UserService userService;
-    private final JwtProvider jwtProvider;
     private final UserMapper userMapper;
+    private final ReservationService reservationService;
 
-    public UserController(UserService userService, JwtProvider jwtProvider, UserMapper userMapper) {
+    public UserController(UserService userService, UserMapper userMapper, ReservationService reservationService) {
         this.userService = userService;
-        this.jwtProvider = jwtProvider;
         this.userMapper = userMapper;
+        this.reservationService = reservationService;
     }
 
     @PostMapping("/registration")
@@ -68,16 +70,9 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping("/logout")
-//	public ResponseEntity<UserDto> logOut(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//
-//		if (auth != null) {
-//			response.getHeader("username", auth.getName());
-//			resp.put("session, lastAccessedTime", session.getLastAccessedTime());
-//			new SecurityContextLogoutHandler().logout(request, response, auth);
-//		}
-//
-//		return new ResponseEntity<>(resp, HttpStatus.OK);
-//	}
+    @GetMapping("/user/{userId}/reservations")
+    public ResponseEntity<List<ReservationDto>> showUsersReservations(@PathVariable("userId") long userId) {
+        List<ReservationDto> reservationDtoList = reservationService.findAllReservationsByUserId(userId);
+        return ok(reservationDtoList);
+    }
 }
