@@ -51,4 +51,12 @@ public class ReservationController {
         reservationService.delete(reservationId);
         return new ResponseEntity<>(OK);
     }
+
+    @PutMapping("restaurant/{restaurantId}/reservation/{reservationId}/reservationStatus")
+    public ResponseEntity<ReservationDto> setReservationStatus(@PathVariable("reservationId") Long reservationId,
+                                                               @PathVariable("restaurantId") Long restaurantId,
+                                                               @RequestBody ReservationDto reservationDto) {
+        ReservationDto changeReservationDto = reservationService.setStatusToReservation(reservationId, reservationDto.getStatus());
+        return new ResponseEntity<>(changeReservationDto,OK);
+    }
 }
