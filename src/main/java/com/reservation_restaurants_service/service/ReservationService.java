@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,6 +79,14 @@ public class ReservationService {
         } else {
             throw new ReservationNotFoundException();
         }
+    }
+
+    public List<ReservationDto> findByUserId(long id) {
+        List<Reservation> reservations = reservationRepository.findByUserId(id);
+        List<ReservationDto> reservationDtoList = new ArrayList<>();
+        reservations.forEach(reservation -> reservationDtoList
+                .add(reservationMapper.convertReservationToReservationDto(reservation)));
+        return reservationDtoList;
     }
 
     public List<ReservationDto> findAllReservationsByUserId(long userId) {
