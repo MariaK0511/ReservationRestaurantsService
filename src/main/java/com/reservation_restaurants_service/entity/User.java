@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +22,6 @@ public class User {
     private String email;
     private String password;
     private long phoneNumber;
-    @OneToMany
-    List<Reservation> reservations;
-
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Role> roleList;
 

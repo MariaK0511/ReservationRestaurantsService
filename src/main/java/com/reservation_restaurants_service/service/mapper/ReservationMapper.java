@@ -6,19 +6,26 @@ import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.entity.User;
 import org.springframework.stereotype.Component;
 
-import static java.time.LocalDateTime.now;
-
 @Component
 public class ReservationMapper {
 
-    public Reservation convertReservationDtoToReservation(ReservationDto reservationDto, Restaurant restaurant, User user) {
-        return new Reservation(reservationDto.getId(),
-                restaurant, now(),
-                reservationDto.getGuests(), user);
+    public Reservation convertReservationDtoToReservation(ReservationDto reservationDto,
+                                                          Restaurant restaurant,
+                                                          User user) {
+        Reservation reservation = new Reservation();
+        reservation.setGuests(reservationDto.getGuests());
+        reservation.setRestaurant(restaurant);
+        reservation.setUser(user);
+        return reservation;
     }
 
     public ReservationDto convertReservationToReservationDto(Reservation reservation) {
-        return new ReservationDto(reservation.getId(),
-                now(), reservation.getGuests());
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setId(reservation.getId());
+        reservationDto.setCreationTime(reservation.getCreationTime());
+        reservationDto.setGuests(reservation.getGuests());
+        reservationDto.setStatus(reservation.getStatus());
+        reservationDto.setTimeStatusChange(reservation.getTimeOfStatusChange());
+        return reservationDto;
     }
 }

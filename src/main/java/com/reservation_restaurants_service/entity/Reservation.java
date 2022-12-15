@@ -1,6 +1,6 @@
 package com.reservation_restaurants_service.entity;
 
-import lombok.AllArgsConstructor;
+import com.reservation_restaurants_service.enums.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,15 +13,18 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    Restaurant restaurant;
+    private Restaurant restaurant;
     private LocalDateTime creationTime;
     private long guests;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @Column(name = "time_status_change")
+    private LocalDateTime timeOfStatusChange;
     @ManyToOne
     private User user;
 }

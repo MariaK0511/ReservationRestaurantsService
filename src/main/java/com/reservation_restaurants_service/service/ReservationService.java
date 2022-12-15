@@ -4,6 +4,7 @@ import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.entity.Reservation;
 import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.entity.User;
+import com.reservation_restaurants_service.enums.Status;
 import com.reservation_restaurants_service.exception.ReservationNotFoundException;
 import com.reservation_restaurants_service.repository.ReservationRepository;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
@@ -12,7 +13,7 @@ import com.reservation_restaurants_service.service.mapper.ReservationMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +36,10 @@ public class ReservationService {
     public ReservationDto save(ReservationDto reservationDto, long restaurantId, long userId) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
         Optional<User> user = userRepository.findById(userId);
-        Reservation reservation = reservationMapper.convertReservationDtoToReservation(reservationDto, restaurant.get(), user.get());
+
+        Reservation reservation = reservationMapper.convertReservationDtoToReservation(reservationDto,
+                restaurant.get(), user.get());
+        reservation.setCreationTime(LocalDateTime.now());
         reservationRepository.save(reservation);
         return reservationMapper.convertReservationToReservationDto(reservation);
     }
@@ -60,7 +64,6 @@ public class ReservationService {
         Optional<Reservation> reservationById = reservationRepository.findById(id);
         if (reservationById.isPresent()) {
             Reservation editedReservation = reservationById.get();
-            editedReservation.setCreationTime(reservationDto.getCreationTime());
             editedReservation.setGuests(reservationDto.getGuests());
             reservationRepository.save(editedReservation);
             return reservationMapper.convertReservationToReservationDto(editedReservation);
@@ -77,14 +80,6 @@ public class ReservationService {
         }
     }
 
-    public List<ReservationDto> findByUserId(long id) {
-        List<Reservation> reservations = reservationRepository.findByUserId(id);
-        List<ReservationDto> reservationDtoList = new ArrayList<>();
-        reservations.forEach(reservation -> reservationDtoList
-                .add(reservationMapper.convertReservationToReservationDto(reservation)));
-        return reservationDtoList;
-    }
-
     public List<ReservationDto> findAllReservationsByUserId(long userId) {
         return reservationRepository.findByUserId(userId)
                 .stream()
@@ -97,5 +92,17 @@ public class ReservationService {
                 .stream()
                 .map(reservationMapper::convertReservationToReservationDto)
                 .collect(Collectors.toList());
+    }
+
+    public ReservationDto setStatusToReservation(long id, Status status) {
+        Optional<Reservation> reservationById = reservationRepository.findById(id);
+        if (reservationById.isPresent()) {
+            Reservation reservation = reservationById.get();
+            reservation.setStatus(status);
+            reservation.setTimeOfStatusChange(LocalDateTime.now());
+            reservationRepository.save(reservation);
+            return reservationMapper.convertReservationToReservationDto(reservation);
+        }
+        throw new ReservationNotFoundException();
     }
 }

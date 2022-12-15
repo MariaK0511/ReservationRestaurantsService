@@ -18,6 +18,7 @@ public class RestaurantMapper {
 
     public RestaurantDto convertRestaurantToRestaurantDto(Restaurant restaurant) {
         RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setId(restaurant.getId());
         restaurantDto.setName(restaurant.getName());
         restaurantDto.setAddress(restaurant.getAddress());
         restaurantDto.setPhoneNumber(restaurant.getPhoneNumber());

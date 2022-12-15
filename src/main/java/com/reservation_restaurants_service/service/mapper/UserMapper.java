@@ -7,23 +7,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
     public User convertUserDtoToUser(UserDto userDto) {
-        return new User(userDto.getId(),
-                userDto.getUsername(),
-                userDto.getSurname(),
-                userDto.getNickname(),
-                userDto.getEmail(),
-                userDto.getPassword(),
-                userDto.getPhoneNumber(), null, null, null);
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setSurname(userDto.getSurname());
+        user.setNickname(userDto.getNickname());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        return user;
     }
 
     public UserDto convertUserToUserDto(User user) {
-        return new UserDto(user.getId(),
-                user.getUsername(),
-                user.getSurname(),
-                user.getNickname(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getPhoneNumber());
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setUsername(user.getUsername());
+        userDto.setSurname(user.getSurname());
+        userDto.setNickname(user.getNickname());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        return userDto;
     }
 
     public UserDto convertUserDtoToUserDto(UserDto incomeUserDto, UserDto savedUserDto) {
