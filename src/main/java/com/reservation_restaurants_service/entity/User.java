@@ -1,10 +1,11 @@
 package com.reservation_restaurants_service.entity;
 
-
-import lombok.*;
+import com.reservation_restaurants_service.enums.UserRole;
+import com.reservation_restaurants_service.enums.UserStatus;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,9 +23,9 @@ public class User {
     private String email;
     private String password;
     private long phoneNumber;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Role> roleList;
-
     @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(name = "user_role")
+    private UserRole userRole;
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 }

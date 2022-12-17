@@ -22,7 +22,7 @@ public class RestaurantController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping("/restaurant")
+    @PostMapping("/restaurant/save")
     public ResponseEntity<RestaurantDto> save(@RequestBody RestaurantDto restaurantDto) {
         RestaurantDto saveRestaurant = restaurantService.save(restaurantDto);
         return ok(saveRestaurant);

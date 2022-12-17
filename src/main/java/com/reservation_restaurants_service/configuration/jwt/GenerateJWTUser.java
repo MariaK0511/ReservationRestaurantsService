@@ -1,15 +1,14 @@
 package com.reservation_restaurants_service.configuration.jwt;
 
 
-import com.reservation_restaurants_service.entity.Role;
-import com.reservation_restaurants_service.entity.Status;
+import com.reservation_restaurants_service.enums.UserRole;
+import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GenerateJWTUser {
     public static JWTUser create(User user) {
@@ -21,13 +20,14 @@ public class GenerateJWTUser {
                 user.getEmail(),
                 user.getPassword(),
                 user.getPhoneNumber(),
-                user.getStatus().equals(Status.ACTIVE),
-                mapToGrantedAuthorities(new ArrayList<>(user.getRoleList())));
+                user.getUserStatus().equals(UserStatus.ACTIVE),
+                mapToGrantedAuthorities(user.getUserRole()));
     }
 
-    private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> roles) {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getTypeOfRole()))
-                .collect(Collectors.toList());
+    private static List<GrantedAuthority> mapToGrantedAuthorities(UserRole userRole) {
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + userRole);
+        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+        grantedAuthorityList.add(grantedAuthority);
+        return grantedAuthorityList;
     }
 }
