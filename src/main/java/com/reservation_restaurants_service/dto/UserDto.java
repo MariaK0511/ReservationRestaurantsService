@@ -1,5 +1,6 @@
 package com.reservation_restaurants_service.dto;
 
+import com.reservation_restaurants_service.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,5 @@ public class UserDto {
     @NotBlank(message = "Field cannot be empty")
     private String password;
     private long phoneNumber;
+    private UserRole userRole;
 }

@@ -1,7 +1,6 @@
 package com.reservation_restaurants_service.configuration.jwt;
 
-import com.reservation_restaurants_service.entity.Role;
-import com.reservation_restaurants_service.service.UserService;
+import com.reservation_restaurants_service.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -22,12 +20,7 @@ import java.util.List;
 @Component
 public class JwtProvider {
 
- //   @Value("${jwt.token.secret}")
-    private  String jwtSecret = "jwtSecret";
-
-   // @Value("${jwt.token.expired}")
-    private long jwtExpirationInMs;
-
+    private String jwtSecret = "jwtSecret";
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -38,9 +31,12 @@ public class JwtProvider {
     protected void init() {
         jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
     }
-    public String generationToken(String email, List<Role> roles){
+
+    public String generationToken(String email, UserRole userRole) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", getUserRoleNamesFromJWT(roles));
+        List<UserRole> userRoles = new ArrayList<>();
+        userRoles.add(userRole);
+        claims.put("roles", userRoles);
 
         Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay().toInstant(ZoneOffset.UTC));
         return Jwts.builder()
@@ -51,30 +47,24 @@ public class JwtProvider {
                 .compact();
     }
 
-    private List<String> getUserRoleNamesFromJWT(List<Role> roles){
-        List<String> result = new ArrayList<>();
-        roles.forEach(role -> result.add(role.getTypeOfRole()));
-        return result;
-    }
-
-    public boolean validatorToken(String token){
-        try{
+    public boolean validatorToken(String token) {
+        try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return false;
     }
 
-    public String getLoginFromToken(String token){
+    public String getLoginFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 
-    public  String resolveToken(HttpServletRequest req){
+    public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if(bearerToken != null && bearerToken.startsWith("Bearer_")){
+        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
             return bearerToken.substring(7);
         }
         return null;

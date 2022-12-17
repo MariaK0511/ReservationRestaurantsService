@@ -1,7 +1,5 @@
 package com.reservation_restaurants_service.controller;
 
-
-
 import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.service.ReservationService;
@@ -16,7 +14,6 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
@@ -50,7 +47,7 @@ public class UserController {
         return new ResponseEntity<>(userById, HttpStatus.OK);
     }
 
-    @GetMapping("/user/")
+    @GetMapping("/users")
     public ResponseEntity<List<UserDto>> findAll() {
         List<UserDto> users = userService.findAllUsers();
         return ok(users);
@@ -74,5 +71,12 @@ public class UserController {
     public ResponseEntity<List<ReservationDto>> showUsersReservations(@PathVariable("userId") long userId) {
         List<ReservationDto> reservationDtoList = reservationService.findAllReservationsByUserId(userId);
         return ok(reservationDtoList);
+    }
+
+    @PutMapping("/user/{userId}/role")
+    public ResponseEntity<UserDto> setUserRole(@PathVariable("userId") Long userId,
+                                               @RequestBody UserDto userDto){
+        UserDto userWithRole = userService.setRoleToUser(userId, userDto.getUserRole());
+        return ok(userWithRole);
     }
 }

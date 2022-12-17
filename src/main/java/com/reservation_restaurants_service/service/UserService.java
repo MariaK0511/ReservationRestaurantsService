@@ -3,13 +3,12 @@ package com.reservation_restaurants_service.service;
 import com.reservation_restaurants_service.configuration.jwt.GenerateJWTUser;
 import com.reservation_restaurants_service.configuration.jwt.JwtProvider;
 import com.reservation_restaurants_service.dto.UserDto;
-import com.reservation_restaurants_service.entity.Role;
-import com.reservation_restaurants_service.entity.Status;
 import com.reservation_restaurants_service.entity.User;
+import com.reservation_restaurants_service.enums.UserRole;
+import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.exception.UserNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,16 +26,16 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
     private final JwtProvider jwtProvider;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, JwtProvider jwtProvider) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, JwtProvider jwtProvider, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.jwtProvider = jwtProvider;
+        this.passwordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class UserService implements UserDetailsService {
         if (userByUsername.isPresent()) {
             User user = userByUsername.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return jwtProvider.generationToken(user.getEmail(), user.getRoleList());
+                return jwtProvider.generationToken(user.getEmail(), user.getUserRole());
             }
             return null;
         }
@@ -62,16 +60,8 @@ public class UserService implements UserDetailsService {
     }
 
     public void registration(User user) {
-        List<Role> roles = new ArrayList<>();
-        Role role = new Role();
-        role.setTypeOfRole("USER");
-        roles.add(role);
-        user.setRoleList(roles);
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoleList(roles);
-        user.setStatus(Status.ACTIVE);
-        role.setUser(user);
+        user.setUserStatus(UserStatus.ACTIVE);
         userRepository.save(user);
     }
 
@@ -79,7 +69,6 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
         return userMapper.convertUserToUserDto(user);
     }
-
 
     public UserDto findUserById(Long id) {
         Optional<User> userById = userRepository.findById(id);
@@ -112,5 +101,16 @@ public class UserService implements UserDetailsService {
         } else {
             throw new UserNotFoundException();
         }
+    }
+
+    public UserDto setRoleToUser(long id, UserRole userRole) {
+        Optional<User> userById = userRepository.findById(id);
+        if (userById.isPresent()) {
+            User user = userById.get();
+            user.setUserRole(userRole);
+            userRepository.save(user);
+            return userMapper.convertUserToUserDto(user);
+        }
+        throw new UserNotFoundException();
     }
 }
