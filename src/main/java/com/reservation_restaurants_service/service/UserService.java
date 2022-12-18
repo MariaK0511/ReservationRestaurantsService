@@ -9,6 +9,8 @@ import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.exception.UserNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +32,7 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
 
     private final JwtProvider jwtProvider;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository, UserMapper userMapper, JwtProvider jwtProvider, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
@@ -63,10 +66,12 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserStatus(UserStatus.ACTIVE);
         userRepository.save(user);
+        logger.info("registration {} was successful", user.getUsername());
     }
 
     public UserDto save(User user) {
         userRepository.save(user);
+        logger.info("user {} was saved", user.getUsername());
         return userMapper.convertUserToUserDto(user);
     }
 
@@ -91,6 +96,7 @@ public class UserService implements UserDetailsService {
         savedUserDto = userMapper.convertUserDtoToUserDto(incomeUserDto, savedUserDto);
         User user = userMapper.convertUserDtoToUser(savedUserDto);
         save(user);
+        logger.info("user {} was updated successfully", user.getNickname());
         return savedUserDto;
     }
 
@@ -98,7 +104,9 @@ public class UserService implements UserDetailsService {
         Optional<User> userById = userRepository.findById(id);
         if (userById.isPresent()) {
             userRepository.delete(userById.get());
+            logger.info("user {} was deleted", userById.get().getNickname());
         } else {
+            logger.info("use");
             throw new UserNotFoundException();
         }
     }
@@ -109,6 +117,7 @@ public class UserService implements UserDetailsService {
             User user = userById.get();
             user.setUserRole(userRole);
             userRepository.save(user);
+            logger.info("role {} for {} was set up", user.getUserRole(), user.getNickname());
             return userMapper.convertUserToUserDto(user);
         }
         throw new UserNotFoundException();

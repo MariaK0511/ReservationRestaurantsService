@@ -10,6 +10,8 @@ import com.reservation_restaurants_service.repository.ReservationRepository;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.ReservationMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,8 @@ public class ReservationService {
     private final UserRepository userRepository;
     private final ReservationMapper reservationMapper;
     private final RestaurantRepository restaurantRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
+
 
     public ReservationService(ReservationRepository reservationRepository, UserRepository userRepository, ReservationMapper reservationMapper, RestaurantRepository restaurantRepository) {
         this.reservationRepository = reservationRepository;
@@ -42,6 +46,7 @@ public class ReservationService {
                 restaurant.get(), user.get());
         reservation.setCreationTime(LocalDateTime.now());
         reservationRepository.save(reservation);
+        logger.info("reservation for {} was created", user.get().getNickname());
         return reservationMapper.convertReservationToReservationDto(reservation);
     }
 
@@ -67,6 +72,7 @@ public class ReservationService {
             Reservation editedReservation = reservationById.get();
             editedReservation.setGuests(reservationDto.getGuests());
             reservationRepository.save(editedReservation);
+            logger.info("reservation  was updated");
             return reservationMapper.convertReservationToReservationDto(editedReservation);
         }
         throw new ReservationNotFoundException();
@@ -76,6 +82,7 @@ public class ReservationService {
         Optional<Reservation> reservationById = reservationRepository.findById(id);
         if (reservationById.isPresent()) {
             reservationRepository.delete(reservationById.get());
+            logger.info("reservation  was deleted");
         } else {
             throw new ReservationNotFoundException();
         }
@@ -110,6 +117,7 @@ public class ReservationService {
             reservation.setStatus(status);
             reservation.setTimeOfStatusChange(LocalDateTime.now());
             reservationRepository.save(reservation);
+            logger.info("status {} for reservation was added", reservation.getStatus());
             return reservationMapper.convertReservationToReservationDto(reservation);
         }
         throw new ReservationNotFoundException();
