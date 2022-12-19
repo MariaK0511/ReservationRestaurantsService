@@ -47,10 +47,9 @@ public class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
-
+    @Mock
     private UserMapper userMapper;
-    private UserDto userDto;
-    private static User testUser;
+
 
     @BeforeEach
     void setUp() {
@@ -63,6 +62,9 @@ public class UserServiceTest {
         User user = new User(1L, "username", "surname", "nickname",
                 "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.save(any(User.class))).thenReturn(user);
+        assertThat(user.getId()).isGreaterThan(0);
+        userService.save(user);
+        assertNotNull(user);
     }
 
     @Test
@@ -70,6 +72,10 @@ public class UserServiceTest {
         User user = new User(1L, "username", "surname", "nickname",
                 "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        userService.findUserById(user.getId());
+        assertThat(user.getId()).isEqualTo(1L);
+        assertNotNull(user);
+
     }
 
     @Test
@@ -77,7 +83,9 @@ public class UserServiceTest {
         List<User> users = new ArrayList<>();
         users.add(new User());
         when(userRepository.findAll()).thenReturn(users);
-
+        userService.findAllUsers();
+        assertThat(users.size()).isGreaterThan(0);
+        assertNotNull(users);
     }
 
     @Test
@@ -88,10 +96,17 @@ public class UserServiceTest {
         user.setSurname("test surname");
         user.setEmail("test email");
         user.setPassword("test password");
-        user.setPhoneNumber(54321);
-        user.setUserRole(UserRole.MANAGER);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        userService.update(userMapper.convertUserToUserDto(user));
+        User updatedUser = userRepository.save(user);
+        UserDto resultUser = userService.update(userMapper.convertUserToUserDto(updatedUser));
+       userService.update(userMapper.convertUserToUserDto(updatedUser));
+        assertThat(resultUser.getUsername()).isEqualTo(updatedUser.getUsername());
+        assertThat(resultUser.getSurname()).isEqualTo(updatedUser.getSurname());
+        assertThat(resultUser.getNickname()).isEqualTo(updatedUser.getNickname());
+        assertThat(resultUser.getEmail()).isEqualTo(updatedUser.getEmail());
+        assertThat(resultUser.getPassword()).isEqualTo(updatedUser.getPassword());
+        assertNotNull(resultUser);
+        assertEquals(resultUser.getId(), updatedUser.getId());
+
     }
 
     @Test
@@ -108,6 +123,7 @@ public class UserServiceTest {
                 "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         user.setUserRole(UserRole.MANAGER);
+        userService.setRoleToUser(user.getId(), UserRole.MANAGER);
         when(userRepository.save(any(User.class))).thenReturn(user);
     }
 }
