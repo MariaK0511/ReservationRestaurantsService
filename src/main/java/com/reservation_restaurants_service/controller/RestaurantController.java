@@ -34,7 +34,7 @@ public class RestaurantController {
         return new ResponseEntity<>(restaurantById, HttpStatus.OK);
     }
 
-    @GetMapping("/restaurant")
+    @GetMapping("/restaurant/restaurants")
     public ResponseEntity<List<RestaurantDto>> findAll() {
         List<RestaurantDto> restaurants = restaurantService.findAllRestaurants();
         return ok(restaurants);

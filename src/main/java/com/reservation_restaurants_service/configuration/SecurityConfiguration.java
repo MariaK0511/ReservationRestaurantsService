@@ -24,12 +24,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/*").hasAnyRole("USER", "ADMIN", "MANAGER")
-                .antMatchers("/reservation/status/*").hasAnyRole("MANAGER","ADMIN")
-                .antMatchers("/reservation/*").hasAnyRole("ADMIN","USER")
-                .antMatchers("/restaurant/*").hasAnyRole("ADMIN")
+                .antMatchers("/reservation/restaurant/*").hasAnyRole("USER","ADMIN")
+                .antMatchers("/reservation/status/*").hasAnyRole("MANAGER", "ADMIN")
+                .antMatchers("/restaurant/*").hasAnyRole("ADMIN", "USER")
                 .antMatchers("/registration", "/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(jwtConfig);
     }
 }
+
+
+
+

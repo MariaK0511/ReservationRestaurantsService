@@ -21,5 +21,5 @@ public class Restaurant {
     private String name;
     private String address;
     private long phoneNumber;
-    private double rating;
+    private long rating;
 }
