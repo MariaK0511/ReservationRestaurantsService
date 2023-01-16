@@ -106,7 +106,7 @@ public class UserService implements UserDetailsService {
             userRepository.delete(userById.get());
             logger.info("user {} was deleted", userById.get().getNickname());
         } else {
-            logger.info("use");
+            logger.warn("such user couldn't find");
             throw new UserNotFoundException();
         }
     }

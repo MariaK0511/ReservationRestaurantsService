@@ -19,5 +19,5 @@ public class RestaurantDto {
     private String address;
     @NotBlank(message = "Field cannot be empty")
     private long phoneNumber;
-    private double rating;
+    private long rating;
 }
