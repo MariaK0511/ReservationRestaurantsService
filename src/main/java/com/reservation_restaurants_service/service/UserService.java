@@ -33,12 +33,14 @@ public class UserService implements UserDetailsService {
 
     private final JwtProvider jwtProvider;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final CorrectionPhoneNumber correctionPhoneNumber;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, JwtProvider jwtProvider, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, JwtProvider jwtProvider, BCryptPasswordEncoder bCryptPasswordEncoder, CorrectionPhoneNumber correctionPhoneNumber) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = bCryptPasswordEncoder;
+        this.correctionPhoneNumber = correctionPhoneNumber;
     }
 
     @Override
@@ -65,6 +67,7 @@ public class UserService implements UserDetailsService {
     public void registration(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserStatus(UserStatus.ACTIVE);
+        user.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(user.getPhoneNumber()));
         userRepository.save(user);
         logger.info("registration {} was successful", user.getUsername());
     }
@@ -95,6 +98,7 @@ public class UserService implements UserDetailsService {
         UserDto savedUserDto = findUserById(incomeUserDto.getId());
         savedUserDto = userMapper.convertUserDtoToUserDto(incomeUserDto, savedUserDto);
         User user = userMapper.convertUserDtoToUser(savedUserDto);
+        user.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(user.getPhoneNumber()));
         save(user);
         logger.info("user {} was updated successfully", user.getNickname());
         return savedUserDto;

@@ -21,14 +21,17 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final RestaurantMapper restaurantMapper;
     private static final Logger logger = LoggerFactory.getLogger(RestaurantService.class);
+    private final CorrectionPhoneNumber correctionPhoneNumber;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper) {
+    public RestaurantService(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper, CorrectionPhoneNumber correctionPhoneNumber) {
         this.restaurantRepository = restaurantRepository;
         this.restaurantMapper = restaurantMapper;
+        this.correctionPhoneNumber = correctionPhoneNumber;
     }
 
     public RestaurantDto save(RestaurantDto restaurantDto) {
         Restaurant restaurant = restaurantMapper.convertRestaurantDtoToRestaurant(restaurantDto);
+        restaurant.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(restaurant.getPhoneNumber()));
         restaurantRepository.save(restaurant);
         logger.info("restaurant {} was created", restaurant.getName());
         return restaurantMapper.convertRestaurantToRestaurantDto(restaurant);
@@ -51,6 +54,7 @@ public class RestaurantService {
     public RestaurantDto update(RestaurantDto incomeRestaurantDto) {
         RestaurantDto savedRestaurantDto = findRestaurantById(incomeRestaurantDto.getId());
         savedRestaurantDto = restaurantMapper.convertRestaurantDtoToRestaurantDto(incomeRestaurantDto, savedRestaurantDto);
+        savedRestaurantDto.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(savedRestaurantDto.getPhoneNumber()));
         save(savedRestaurantDto);
         logger.info("restaurant {} was updated successfully", savedRestaurantDto.getName());
         return savedRestaurantDto;

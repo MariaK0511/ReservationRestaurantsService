@@ -34,18 +34,18 @@ public class UserServiceTest {
     private UserService userService;
     @Mock
     private UserMapper userMapper;
-
+    private CorrectionPhoneNumber correctionPhoneNumber;
 
     @BeforeEach
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
-        userService = new UserService(userRepository, userMapper, null, null);
+        userService = new UserService(userRepository, userMapper, null, null, correctionPhoneNumber);
     }
 
     @Test
     void givenUser_whenCreateUser_thenReturnSavedUser() throws Exception {
         User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
+                "email", "password", "12344L", UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.save(any(User.class))).thenReturn(user);
         userService.save(user);
         assertThat(user.getId()).isGreaterThan(0);
@@ -55,7 +55,7 @@ public class UserServiceTest {
     @Test
     void givenUserId_whenGetUserId_thenReturnUser() throws Exception {
         User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
+                "email", "password", "777", UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         userService.findUserById(user.getId());
         assertThat(user.getId()).isEqualTo(1L);
@@ -76,14 +76,14 @@ public class UserServiceTest {
     @Test
     void givenUser_whenUpdateUser_thenReturnUpdatedUser() throws NullPointerException {
         User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
+                "email", "password", "8766", UserRole.USER, UserStatus.ACTIVE);
         user.setUsername("test username");
         user.setSurname("test surname");
         user.setEmail("test email");
         user.setPassword("test password");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         UserDto updatedUser = new UserDto(1L, "test username", "test surname", "test nickname",
-                "email", "password", 12344L, UserRole.USER);
+                "email", "password", "98", UserRole.USER);
         UserDto resultUser = userService.update(updatedUser);
         assertThat(updatedUser.getUsername()).isEqualTo(resultUser.getUsername());
         assertThat(updatedUser.getSurname()).isEqualTo(resultUser.getSurname());
@@ -97,7 +97,7 @@ public class UserServiceTest {
     @Test
     void givenUser_whenDeleteUser() throws Exception {
         User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
+                "email", "password", "987", UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         Optional<User> savedUser = Optional.of(user);
         savedUser.ifPresent(value -> userService.delete(value.getId()));
@@ -106,7 +106,7 @@ public class UserServiceTest {
     @Test
     void givenUser_whenAddRoleToUser_returnUserWithRole() throws Exception {
         User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", 12344L, UserRole.USER, UserStatus.ACTIVE);
+                "email", "password", "98", UserRole.USER, UserStatus.ACTIVE);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         user.setUserRole(UserRole.MANAGER);
         userService.setRoleToUser(user.getId(), UserRole.MANAGER);
