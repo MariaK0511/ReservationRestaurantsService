@@ -506,3 +506,119 @@
 2023-01-24 16:10:26.585  INFO 10884 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
 2023-01-24 16:10:26.729  INFO 10884 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2023-01-24 16:10:26.741  INFO 10884 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-01-24 19:55:44.263  INFO 6548 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Starting CorrectionPhoneNumberTest using Java 11.0.17 on DESKTOP-HH8JQI9 with PID 6548 (started by maria in C:\Users\maria\IdeaProjects\ReservationRestaurantsService)
+2023-01-24 19:55:44.309  INFO 6548 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : No active profile set, falling back to 1 default profile: "default"
+2023-01-24 19:56:02.929  INFO 6548 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-24 19:56:03.872  INFO 6548 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 755 ms. Found 3 JPA repository interfaces.
+2023-01-24 19:56:13.312  INFO 6548 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-01-24 19:56:15.037  INFO 6548 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2023-01-24 19:56:16.546  INFO 6548 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-01-24 19:56:17.471  INFO 6548 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-01-24 19:56:20.548  INFO 6548 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-01-24 19:56:20.814  INFO 6548 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2023-01-24 19:56:28.929  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 19:56:28.932  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 19:56:28.949  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 19:56:28.950  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 19:56:29.005  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 19:56:29.006  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "reservations" не существует, пропускается
+2023-01-24 19:56:29.034  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 19:56:29.035  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "restaurants" не существует, пропускается
+2023-01-24 19:56:29.066  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 19:56:29.067  WARN 6548 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "users" не существует, пропускается
+2023-01-24 19:56:32.408  INFO 6548 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-01-24 19:56:32.575  INFO 6548 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 19:56:33.057  WARN 6548 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-01-24 19:56:36.352  INFO 6548 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@84eafc2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4440750, org.springframework.security.web.context.SecurityContextPersistenceFilter@267b678f, org.springframework.security.web.header.HeaderWriterFilter@270be080, org.springframework.security.web.authentication.logout.LogoutFilter@5d373794, com.reservation_restaurants_service.configuration.jwt.JwtFilter@21bd6fd1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1ce8084a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10b5ff4d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@63d9e1a, org.springframework.security.web.session.SessionManagementFilter@4e826fd4, org.springframework.security.web.access.ExceptionTranslationFilter@2fe2fcc2, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5c552f08]
+2023-01-24 19:56:41.054  INFO 6548 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Started CorrectionPhoneNumberTest in 75.177 seconds (JVM running for 110.237)
+2023-01-24 19:56:44.803  INFO 6548 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 19:56:44.805  INFO 6548 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2023-01-24 19:56:45.869  INFO 6548 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-01-24 19:56:45.928  INFO 6548 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-01-24 20:02:54.855  INFO 9964 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Starting CorrectionPhoneNumberTest using Java 11.0.17 on DESKTOP-HH8JQI9 with PID 9964 (started by maria in C:\Users\maria\IdeaProjects\ReservationRestaurantsService)
+2023-01-24 20:02:54.882  INFO 9964 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : No active profile set, falling back to 1 default profile: "default"
+2023-01-24 20:03:17.289  INFO 9964 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-24 20:03:18.289  INFO 9964 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 902 ms. Found 3 JPA repository interfaces.
+2023-01-24 20:03:24.084  INFO 9964 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-01-24 20:03:24.817  INFO 9964 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2023-01-24 20:03:26.046  INFO 9964 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-01-24 20:03:26.877  INFO 9964 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-01-24 20:03:31.198  INFO 9964 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-01-24 20:03:31.349  INFO 9964 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2023-01-24 20:03:37.542  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:03:37.546  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 20:03:37.570  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:03:37.573  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 20:03:37.653  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:03:37.654  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "reservations" не существует, пропускается
+2023-01-24 20:03:37.660  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:03:37.661  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "restaurants" не существует, пропускается
+2023-01-24 20:03:37.681  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:03:37.682  WARN 9964 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "users" не существует, пропускается
+2023-01-24 20:03:41.457  INFO 9964 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-01-24 20:03:41.560  INFO 9964 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 20:03:42.859  WARN 9964 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-01-24 20:03:53.275  INFO 9964 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7298c2d9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@377cbdae, org.springframework.security.web.context.SecurityContextPersistenceFilter@4880a9d, org.springframework.security.web.header.HeaderWriterFilter@267b678f, org.springframework.security.web.authentication.logout.LogoutFilter@5ef7ae2f, com.reservation_restaurants_service.configuration.jwt.JwtFilter@3f62d56, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1018f702, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@73905dff, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@37a939bc, org.springframework.security.web.session.SessionManagementFilter@4edd8a0a, org.springframework.security.web.access.ExceptionTranslationFilter@384f0e32, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@74f92d14]
+2023-01-24 20:04:03.992  INFO 9964 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Started CorrectionPhoneNumberTest in 73.48 seconds (JVM running for 92.407)
+2023-01-24 20:04:06.312  INFO 9964 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 20:04:06.318  INFO 9964 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2023-01-24 20:04:06.802  INFO 9964 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-01-24 20:04:06.862  INFO 9964 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-01-24 20:12:11.133  INFO 6748 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Starting CorrectionPhoneNumberTest using Java 11.0.17 on DESKTOP-HH8JQI9 with PID 6748 (started by maria in C:\Users\maria\IdeaProjects\ReservationRestaurantsService)
+2023-01-24 20:12:11.162  INFO 6748 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : No active profile set, falling back to 1 default profile: "default"
+2023-01-24 20:12:31.131  INFO 6748 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-24 20:12:31.931  INFO 6748 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 494 ms. Found 3 JPA repository interfaces.
+2023-01-24 20:12:40.134  INFO 6748 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-01-24 20:12:41.895  INFO 6748 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2023-01-24 20:12:45.709  INFO 6748 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-01-24 20:12:48.094  INFO 6748 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-01-24 20:12:55.181  INFO 6748 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-01-24 20:12:55.325  INFO 6748 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2023-01-24 20:13:05.070  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:13:05.073  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 20:13:05.117  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:13:05.118  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 20:13:05.482  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:13:05.483  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "reservations" не существует, пропускается
+2023-01-24 20:13:05.487  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:13:05.488  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "restaurants" не существует, пропускается
+2023-01-24 20:13:05.543  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:13:05.544  WARN 6748 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "users" не существует, пропускается
+2023-01-24 20:13:11.861  INFO 6748 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-01-24 20:13:12.024  INFO 6748 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 20:13:12.449  WARN 6748 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-01-24 20:13:19.160  INFO 6748 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6c537267, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@19c06762, org.springframework.security.web.context.SecurityContextPersistenceFilter@58835bba, org.springframework.security.web.header.HeaderWriterFilter@4056cdb2, org.springframework.security.web.authentication.logout.LogoutFilter@396c1228, com.reservation_restaurants_service.configuration.jwt.JwtFilter@1aee6983, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@c414eb3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1e09c0b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@22e1a1dc, org.springframework.security.web.session.SessionManagementFilter@61d24347, org.springframework.security.web.access.ExceptionTranslationFilter@11896124, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@46eb2260]
+2023-01-24 20:13:28.356  INFO 6748 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Started CorrectionPhoneNumberTest in 80.029 seconds (JVM running for 99.245)
+2023-01-24 20:13:32.055  INFO 6748 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 20:13:32.057  INFO 6748 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2023-01-24 20:13:33.006  INFO 6748 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-01-24 20:13:33.056  INFO 6748 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-01-24 20:18:57.779  INFO 6296 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Starting CorrectionPhoneNumberTest using Java 11.0.17 on DESKTOP-HH8JQI9 with PID 6296 (started by maria in C:\Users\maria\IdeaProjects\ReservationRestaurantsService)
+2023-01-24 20:18:57.801  INFO 6296 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : No active profile set, falling back to 1 default profile: "default"
+2023-01-24 20:19:17.453  INFO 6296 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-24 20:19:18.162  INFO 6296 --- [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 630 ms. Found 3 JPA repository interfaces.
+2023-01-24 20:19:21.461  INFO 6296 --- [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-01-24 20:19:22.013  INFO 6296 --- [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.12.Final
+2023-01-24 20:19:23.778  INFO 6296 --- [Test worker] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-01-24 20:19:25.064  INFO 6296 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-01-24 20:19:29.660  INFO 6296 --- [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-01-24 20:19:29.960  INFO 6296 --- [Test worker] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
+2023-01-24 20:19:38.901  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:19:38.907  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 20:19:38.952  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:19:38.953  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : отношение "reservations" не существует, пропускается
+2023-01-24 20:19:39.028  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:19:39.030  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "reservations" не существует, пропускается
+2023-01-24 20:19:39.035  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:19:39.036  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "restaurants" не существует, пропускается
+2023-01-24 20:19:39.040  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2023-01-24 20:19:39.043  WARN 6296 --- [Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : таблица "users" не существует, пропускается
+2023-01-24 20:19:42.244  INFO 6296 --- [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-01-24 20:19:42.391  INFO 6296 --- [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 20:19:43.245  WARN 6296 --- [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-01-24 20:19:47.724  INFO 6296 --- [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@10280879, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3472f3ab, org.springframework.security.web.context.SecurityContextPersistenceFilter@61d24347, org.springframework.security.web.header.HeaderWriterFilter@69fe8c75, org.springframework.security.web.authentication.logout.LogoutFilter@774189d0, com.reservation_restaurants_service.configuration.jwt.JwtFilter@e344f14, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@630e5010, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@c414eb3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5e557671, org.springframework.security.web.session.SessionManagementFilter@5b5a89d1, org.springframework.security.web.access.ExceptionTranslationFilter@623ded82, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@64df8422]
+2023-01-24 20:19:51.010  INFO 6296 --- [Test worker] c.r.service.CorrectionPhoneNumberTest    : Started CorrectionPhoneNumberTest in 58.137 seconds (JVM running for 71.652)
+2023-01-24 20:19:51.921  INFO 6296 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-01-24 20:19:51.924  INFO 6296 --- [SpringApplicationShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2023-01-24 20:19:52.141  INFO 6296 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-01-24 20:19:52.195  INFO 6296 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

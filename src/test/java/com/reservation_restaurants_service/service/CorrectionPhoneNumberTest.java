@@ -14,8 +14,7 @@ import org.testng.annotations.BeforeTest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -32,35 +31,29 @@ class CorrectionPhoneNumberTest {
 
     @Test
     void checkPhoneNumberIfBeginWithPlus() {
-        String phoneNumber = "+37544455656";
+        String phoneNumber = "37544455656";
         String plus = "+";
-        if (phoneNumber.startsWith(plus)) {
-            assertTrue(true);
-        }
+        assertThat(correctionPhoneNumber.correctPhoneNumber(phoneNumber)).startsWith(plus);
     }
 
     @Test
     void changePhoneNumberWithMoreThanOnePlus() {
-        String phoneNumber = "++++37544455656";
-        if (correctionPhoneNumber.isValid(phoneNumber)) {
-            phoneNumber = phoneNumber.replaceAll("[\\+]{2,}", "+");
-        }
-    }
+        String plus = "+";
+        String checkedPhoneNumber = correctionPhoneNumber.correctPhoneNumber("+++++3756667887");
+        assertThat(checkedPhoneNumber).startsWith(plus.repeat(1));
 
+    }
 
     @Test
     void checkIfPhoneNumberHasPlus() {
         String plus = "+";
         String checkedPhoneNumber = "37544776547";
-        if (!checkedPhoneNumber.startsWith(plus)) {
-            plus.concat(checkedPhoneNumber);
-        }
+        assertThat(correctionPhoneNumber.correctPhoneNumber(checkedPhoneNumber)).doesNotContain(plus).startsWith(plus);
     }
 
     @Test
     void checkPhoneNumberIsNotNull() {
         String checkedPhoneNumber = null;
-        assertNotNull(correctionPhoneNumber.correctPhoneNumber("+375447899807"));
         assertThrows(PhoneNumberNotFoundException.class, () -> correctionPhoneNumber.correctPhoneNumber(checkedPhoneNumber));
     }
 }
