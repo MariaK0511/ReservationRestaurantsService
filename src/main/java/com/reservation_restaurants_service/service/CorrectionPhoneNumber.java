@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @Transactional
 public class CorrectionPhoneNumber {
     private String plus = "+";
-    public  boolean isValid(String checkedPhoneNumber) {
+    public  boolean isPhoneContainsMoreThanOnePlus(String checkedPhoneNumber) {
         Pattern p = Pattern.compile("[\\+]{2,}+[\\d]+");
         Matcher m = p.matcher(checkedPhoneNumber);
         return (m.matches());
@@ -21,7 +21,7 @@ public class CorrectionPhoneNumber {
         if (phoneNumber == null) {
             throw new PhoneNumberNotFoundException("such phone number wasn't found!");
         }
-        if (isValid(phoneNumber)) {
+        if (isPhoneContainsMoreThanOnePlus(phoneNumber)) {
             phoneNumber = phoneNumber.replaceAll("[\\+]{2,}", "+");
         }
         if (phoneNumber.startsWith(plus)) {
