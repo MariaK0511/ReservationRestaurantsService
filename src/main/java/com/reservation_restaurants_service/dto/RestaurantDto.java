@@ -18,6 +18,6 @@ public class RestaurantDto {
     @NotBlank(message = "Field cannot be empty")
     private String address;
     @NotBlank(message = "Field cannot be empty")
-    private long phoneNumber;
+    private String phoneNumber;
     private long rating;
 }

@@ -24,6 +24,6 @@ public class UserDto {
     private String email;
     @NotBlank(message = "Field cannot be empty")
     private String password;
-    private long phoneNumber;
+    private String phoneNumber;
     private UserRole userRole;
 }

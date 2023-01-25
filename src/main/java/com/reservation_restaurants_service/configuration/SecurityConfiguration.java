@@ -33,7 +33,3 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .apply(jwtConfig);
     }
 }
-
-
-
-

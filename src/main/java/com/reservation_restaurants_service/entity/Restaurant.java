@@ -20,6 +20,6 @@ public class Restaurant {
     private long id;
     private String name;
     private String address;
-    private long phoneNumber;
+    private String phoneNumber;
     private long rating;
 }

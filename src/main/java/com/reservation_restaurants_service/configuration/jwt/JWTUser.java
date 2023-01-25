@@ -14,14 +14,14 @@ public class JWTUser implements UserDetails {
     private final String nickname;
     private final String email;
     private final String password;
-    private final long phoneNumber;
+    private final String phoneNumber;
     private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public JWTUser(long id, String username,
                    String surname, String nickname,
                    String email, String password,
-                   long phoneNumber, boolean enabled,
+                   String phoneNumber, boolean enabled,
                    Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -52,7 +52,7 @@ public class JWTUser implements UserDetails {
         return nickname;
     }
 
-    public long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
