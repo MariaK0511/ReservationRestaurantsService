@@ -2,6 +2,7 @@ package com.reservation_restaurants_service.controller;
 
 import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.service.ReservationService;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
+@Api(tags = "Reservation")
 public class ReservationController {
     private final ReservationService reservationService;
 

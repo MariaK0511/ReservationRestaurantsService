@@ -5,6 +5,8 @@ import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.service.ReservationService;
 import com.reservation_restaurants_service.service.UserService;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
+@Api(tags = "User")
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
@@ -42,12 +45,14 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}")
+    @ApiOperation(value = "Find user")
     public ResponseEntity<UserDto> findById(@PathVariable("userId") Long userId) {
         UserDto userById = userService.findUserById(userId);
         return new ResponseEntity<>(userById, HttpStatus.OK);
     }
 
     @GetMapping("/users")
+    @ApiOperation(value = "Show users")
     public ResponseEntity<List<UserDto>> findAll() {
         List<UserDto> users = userService.findAllUsers();
         return ok(users);
