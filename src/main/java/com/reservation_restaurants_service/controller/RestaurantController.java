@@ -25,27 +25,28 @@ public class RestaurantController {
         this.reservationService = reservationService;
     }
 
+    @ApiOperation(value = "Add restaurant", notes = "Creating and adding restaurant in database")
     @PostMapping("/restaurant/save")
-    @ApiOperation(value = "Add restaurant")
     public ResponseEntity<RestaurantDto> save(@RequestBody RestaurantDto restaurantDto) {
         RestaurantDto saveRestaurant = restaurantService.save(restaurantDto);
         return ok(saveRestaurant);
     }
 
+    @ApiOperation(value = "Get restaurant by id", notes = "Return a restaurant as per the id")
     @GetMapping("/restaurant/{restaurantId}")
-    @ApiOperation(value = "Find restaurant")
     public ResponseEntity<RestaurantDto> findById(@PathVariable("restaurantId") Long restaurantId) {
         RestaurantDto restaurantById = restaurantService.findRestaurantById(restaurantId);
         return new ResponseEntity<>(restaurantById, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get all restaurants", notes = "Return all restaurant")
     @GetMapping("/restaurant/restaurants")
-    @ApiOperation(value = "Show restaurants")
     public ResponseEntity<List<RestaurantDto>> findAll() {
         List<RestaurantDto> restaurants = restaurantService.findAllRestaurants();
         return ok(restaurants);
     }
 
+    @ApiOperation(value = "Update restaurant by id", notes = "Return updated restaurant as per the id")
     @PutMapping("/restaurant/{restaurantId}")
     public ResponseEntity<RestaurantDto> update(@PathVariable("restaurantId") Long restaurantId,
                                                 @RequestBody RestaurantDto restaurantDto) {
@@ -54,12 +55,14 @@ public class RestaurantController {
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Delete restaurant by id")
     @DeleteMapping("/restaurant/{restaurantId}")
     public ResponseEntity<RestaurantDto> deleteRestaurant(@PathVariable("restaurantId") Long restaurantId) {
         restaurantService.delete(restaurantId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Get restaurant reservations by id", notes = "Return restaurant reservations as per the id")
     @GetMapping("/restaurant/{restaurantId}/reservations")
     public ResponseEntity<List<ReservationDto>> showReservationsOfRestaurant(@PathVariable("restaurantId") Long restaurantId) {
       List<ReservationDto> reservationDtoList = reservationService.findAllReservationsByRestaurantId(restaurantId);
