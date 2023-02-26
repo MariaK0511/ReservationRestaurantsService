@@ -2,6 +2,7 @@ package com.reservation_restaurants_service.service;
 
 import com.reservation_restaurants_service.configuration.jwt.GenerateJWTUser;
 import com.reservation_restaurants_service.configuration.jwt.JwtProvider;
+import com.reservation_restaurants_service.dto.ReviewDto;
 import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
@@ -114,7 +115,6 @@ public class UserService implements UserDetailsService {
             throw new UserNotFoundException();
         }
     }
-
     public UserDto setRoleToUser(long id, UserRole userRole) {
         Optional<User> userById = userRepository.findById(id);
         if (userById.isPresent()) {

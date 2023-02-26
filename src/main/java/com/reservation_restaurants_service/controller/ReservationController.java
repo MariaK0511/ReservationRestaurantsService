@@ -21,8 +21,8 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @PostMapping("/reservation/restaurant/{restaurantId}/user/{userId}/reservation")
     @ApiOperation(value = "Add reservation by restaurant id and user id", notes = "Creating and adding reservation in database")
+    @PostMapping("/reservation/restaurant/{restaurantId}/user/{userId}/reservation")
     public ResponseEntity<ReservationDto> save(@RequestBody ReservationDto reservationDto,
                                                @PathVariable("restaurantId") long restaurantId,
                                                @PathVariable("userId") long userId) {
@@ -30,15 +30,15 @@ public class ReservationController {
         return ok(saveReservation);
     }
 
-    @GetMapping("reservation/restaurant/{reservationId}")
     @ApiOperation(value = "Get reservation by  id", notes = "Return reservation as per the id")
+    @GetMapping("/reservation/restaurant/{reservationId}")
     public ResponseEntity<ReservationDto> findById(@PathVariable("reservationId") Long reservationId) {
         ReservationDto reservationById = reservationService.findReservationById(reservationId);
         return new ResponseEntity<>(reservationById, OK);
     }
 
-    @GetMapping("/reservation/restaurant/reservations")
     @ApiOperation(value = "Get all reservations", notes = "Return all reservations")
+    @GetMapping("/reservation/restaurant/reservations")
     public ResponseEntity<List<ReservationDto>> findAll() {
         List<ReservationDto> reservations = reservationService.findAllReservations();
         return ok(reservations);
@@ -52,6 +52,7 @@ public class ReservationController {
         ReservationDto reservation = reservationService.update(reservationDto, reservationId);
         return new ResponseEntity<>(reservation, OK);
     }
+
     @ApiOperation(value = "Delete reservation by id")
     @DeleteMapping("/reservation/restaurant/{reservationId}")
     public ResponseEntity<ReservationDto> deleteReservation(@PathVariable("reservationId") Long reservationId) {
@@ -65,6 +66,6 @@ public class ReservationController {
                                                                @PathVariable("restaurantId") Long restaurantId,
                                                                @RequestBody ReservationDto reservationDto) {
         ReservationDto changeReservationDto = reservationService.setStatusToReservation(reservationId, reservationDto.getStatus());
-        return new ResponseEntity<>(changeReservationDto,OK);
+        return new ResponseEntity<>(changeReservationDto, OK);
     }
 }

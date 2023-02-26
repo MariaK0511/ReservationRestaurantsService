@@ -38,4 +38,6 @@ public class UserDto {
     private String phoneNumber;
     @ApiModelProperty(notes = "User role")
     private UserRole userRole;
+    @ApiModelProperty(notes = "User review")
+    private ReviewDto reviewDto;
 }
