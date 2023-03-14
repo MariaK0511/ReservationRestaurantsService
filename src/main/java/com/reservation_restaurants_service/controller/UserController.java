@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +20,12 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @Api(tags = "User")
+@AllArgsConstructor
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final ReservationService reservationService;
 
-    public UserController(UserService userService, UserMapper userMapper, ReservationService reservationService) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-        this.reservationService = reservationService;
-    }
 
     @ApiOperation(value = "User registration", notes = "Creating and adding user in database")
     @ApiResponses(value = {
