@@ -13,6 +13,8 @@ public class RestaurantMapper {
         restaurant.setAddress(restaurantDto.getAddress());
         restaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
         restaurant.setRating(restaurant.getRating());
+        restaurant.setLat(restaurant.getLat());
+        restaurant.setLon(restaurant.getLon());
         return restaurant;
     }
 
@@ -23,6 +25,8 @@ public class RestaurantMapper {
         restaurantDto.setAddress(restaurant.getAddress());
         restaurantDto.setPhoneNumber(restaurant.getPhoneNumber());
         restaurantDto.setRating(restaurant.getRating());
+        restaurantDto.setLat(restaurant.getLat());
+        restaurantDto.setLon(restaurant.getLon());
         return restaurantDto;
     }
 
@@ -32,6 +36,8 @@ public class RestaurantMapper {
         savedRestaurantDto.setAddress(incomeRestaurantDto.getAddress());
         savedRestaurantDto.setPhoneNumber(incomeRestaurantDto.getPhoneNumber());
         savedRestaurantDto.setRating(incomeRestaurantDto.getRating());
+        savedRestaurantDto.setLat(incomeRestaurantDto.getLat());
+        savedRestaurantDto.setLon(incomeRestaurantDto.getLon());
         return savedRestaurantDto;
     }
 }
