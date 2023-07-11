@@ -34,8 +34,8 @@ public class RestaurantController {
 
     @ApiOperation(value = "Get restaurant by id", notes = "Return a restaurant as per the id")
     @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<RestaurantDto> findById(@PathVariable("restaurantId") Long restaurantId) {
-        RestaurantDto restaurantById = restaurantService.findRestaurantById(restaurantId);
+    public ResponseEntity<RestaurantDto> findById(@PathVariable("restaurantId") Long restaurantId, @RequestParam Boolean wantWeather) {
+        RestaurantDto restaurantById = restaurantService.findRestaurantById(restaurantId, wantWeather);
         return new ResponseEntity<>(restaurantById, HttpStatus.OK);
     }
 
