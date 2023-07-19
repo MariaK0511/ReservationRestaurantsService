@@ -10,20 +10,20 @@ import com.reservation_restaurants_service.repository.ReservationRepository;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.ReservationMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class ReservationService {
+
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final ReservationMapper reservationMapper;
@@ -43,7 +43,7 @@ public class ReservationService {
         Optional<User> user = userRepository.findById(userId);
 
         Reservation reservation = reservationMapper.convertReservationDtoToReservation(reservationDto,
-                restaurant.get(), user.get());
+                                                                                       restaurant.get(), user.get());
         reservation.setCreationTime(LocalDateTime.now());
         reservationRepository.save(reservation);
         logger.info("reservation for {} was created", user.get().getNickname());
@@ -61,9 +61,9 @@ public class ReservationService {
 
     public List<ReservationDto> findAllReservations() {
         return reservationRepository.findAll()
-                .stream()
-                .map(reservationMapper::convertReservationToReservationDto)
-                .collect(Collectors.toList());
+                                    .stream()
+                                    .map(reservationMapper::convertReservationToReservationDto)
+                                    .collect(Collectors.toList());
     }
 
     public ReservationDto update(ReservationDto reservationDto, long id) {
@@ -98,16 +98,16 @@ public class ReservationService {
 
     public List<ReservationDto> findAllReservationsByUserId(long userId) {
         return reservationRepository.findByUserId(userId)
-                .stream()
-                .map(reservationMapper::convertReservationToReservationDto)
-                .collect(Collectors.toList());
+                                    .stream()
+                                    .map(reservationMapper::convertReservationToReservationDto)
+                                    .collect(Collectors.toList());
     }
 
     public List<ReservationDto> findAllReservationsByRestaurantId(long restaurantId) {
         return reservationRepository.findByRestaurantId(restaurantId)
-                .stream()
-                .map(reservationMapper::convertReservationToReservationDto)
-                .collect(Collectors.toList());
+                                    .stream()
+                                    .map(reservationMapper::convertReservationToReservationDto)
+                                    .collect(Collectors.toList());
     }
 
     public ReservationDto setStatusToReservation(long id, Status status) {

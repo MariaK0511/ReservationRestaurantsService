@@ -9,20 +9,20 @@ import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.ReviewRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.ReviewMapper;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 @Service
 @Transactional
 @AllArgsConstructor
 public class ReviewService {
+
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
     private final UserRepository userRepository;
@@ -64,15 +64,15 @@ public class ReviewService {
 
     public List<ReviewDto> getAllReviewsByUserId(long userId) {
         return reviewRepository.findByUserId(userId)
-                .stream()
-                .map(reviewMapper::convertReviewToReviewDto)
-                .collect(Collectors.toList());
+                               .stream()
+                               .map(reviewMapper::convertReviewToReviewDto)
+                               .collect(Collectors.toList());
     }
 
     public List<ReviewDto> getAllReviewsByRestaurantId(long restaurantId) {
         return reviewRepository.findByRestaurantId(restaurantId)
-                .stream()
-                .map(reviewMapper::convertReviewToReviewDto)
-                .collect(Collectors.toList());
+                               .stream()
+                               .map(reviewMapper::convertReviewToReviewDto)
+                               .collect(Collectors.toList());
     }
 }

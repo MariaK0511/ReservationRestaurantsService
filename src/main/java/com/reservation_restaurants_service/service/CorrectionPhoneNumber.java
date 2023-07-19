@@ -1,13 +1,14 @@
 package com.reservation_restaurants_service.service;
 
 import com.reservation_restaurants_service.exception.PhoneNumberNotFoundException;
-import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CorrectionPhoneNumber {
-    public  boolean isPhoneContainsMoreThanOnePlus(String checkedPhoneNumber) {
+
+    public boolean isPhoneContainsMoreThanOnePlus(String checkedPhoneNumber) {
         Pattern p = Pattern.compile("[\\+]{2,}+[\\d]+");
         Matcher m = p.matcher(checkedPhoneNumber);
         return m.matches();

@@ -1,22 +1,29 @@
 package com.reservation_restaurants_service.controller;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.dto.RestaurantDto;
 import com.reservation_restaurants_service.service.ReservationService;
 import com.reservation_restaurants_service.service.RestaurantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static org.springframework.http.ResponseEntity.ok;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api(tags = "Restaurant")
 public class RestaurantController {
+
     private final RestaurantService restaurantService;
     private final ReservationService reservationService;
 
@@ -65,7 +72,7 @@ public class RestaurantController {
     @ApiOperation(value = "Get restaurant reservations by id", notes = "Return restaurant reservations as per the id")
     @GetMapping("/restaurant/{restaurantId}/reservations")
     public ResponseEntity<List<ReservationDto>> showReservationsOfRestaurant(@PathVariable("restaurantId") Long restaurantId) {
-      List<ReservationDto> reservationDtoList = reservationService.findAllReservationsByRestaurantId(restaurantId);
+        List<ReservationDto> reservationDtoList = reservationService.findAllReservationsByRestaurantId(restaurantId);
         return ok(reservationDtoList);
     }
 }
