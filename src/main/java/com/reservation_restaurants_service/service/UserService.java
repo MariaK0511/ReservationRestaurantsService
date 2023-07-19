@@ -2,7 +2,6 @@ package com.reservation_restaurants_service.service;
 
 import com.reservation_restaurants_service.configuration.jwt.GenerateJWTUser;
 import com.reservation_restaurants_service.configuration.jwt.JwtProvider;
-import com.reservation_restaurants_service.dto.ReviewDto;
 import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
@@ -10,6 +9,9 @@ import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.exception.UserNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +20,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -73,7 +71,8 @@ public class UserService implements UserDetailsService {
         logger.info("registration {} was successful", user.getUsername());
     }
 
-    public UserDto save(User user) {
+    public UserDto save(UserDto userDto) {
+        User user = userMapper.convertUserDtoToUser(userDto);
         userRepository.save(user);
         logger.info("user {} was saved", user.getUsername());
         return userMapper.convertUserToUserDto(user);
@@ -90,18 +89,17 @@ public class UserService implements UserDetailsService {
 
     public List<UserDto> findAllUsers() {
         return userRepository.findAll()
-                .stream()
-                .map(userMapper::convertUserToUserDto)
-                .collect(Collectors.toList());
+                             .stream()
+                             .map(userMapper::convertUserToUserDto)
+                             .collect(Collectors.toList());
     }
 
     public UserDto update(UserDto incomeUserDto) {
         UserDto savedUserDto = findUserById(incomeUserDto.getId());
         savedUserDto = userMapper.convertUserDtoToUserDto(incomeUserDto, savedUserDto);
-        User user = userMapper.convertUserDtoToUser(savedUserDto);
-        user.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(user.getPhoneNumber()));
-        save(user);
-        logger.info("user {} was updated successfully", user.getNickname());
+        savedUserDto.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(savedUserDto.getPhoneNumber()));
+        save(savedUserDto);
+        logger.info("user {} was updated successfully", savedUserDto.getNickname());
         return savedUserDto;
     }
 
@@ -115,6 +113,7 @@ public class UserService implements UserDetailsService {
             throw new UserNotFoundException();
         }
     }
+
     public UserDto setRoleToUser(long id, UserRole userRole) {
         Optional<User> userById = userRepository.findById(id);
         if (userById.isPresent()) {

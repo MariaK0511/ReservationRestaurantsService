@@ -1,8 +1,6 @@
 package com.reservation_restaurants_service.service.mapper;
 
-import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.dto.ReviewDto;
-import com.reservation_restaurants_service.entity.Reservation;
 import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.entity.Review;
 import com.reservation_restaurants_service.entity.User;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ReviewMapper {
+
     public Review convertReviewDtoToReview(ReviewDto reviewDto,
                                            Restaurant restaurant,
                                            User user) {

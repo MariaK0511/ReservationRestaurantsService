@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Restaurant {
+public class Restaurant extends AuditorEntities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

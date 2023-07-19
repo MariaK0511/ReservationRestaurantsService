@@ -9,12 +9,13 @@ public class RestaurantMapper {
 
     public Restaurant convertRestaurantDtoToRestaurant(RestaurantDto restaurantDto) {
         Restaurant restaurant = new Restaurant();
+        restaurant.setId(restaurant.getId());
         restaurant.setName(restaurantDto.getName());
         restaurant.setAddress(restaurantDto.getAddress());
         restaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
-        restaurant.setRating(restaurant.getRating());
-        restaurant.setLat(restaurant.getLat());
-        restaurant.setLon(restaurant.getLon());
+        restaurant.setRating(restaurantDto.getRating());
+        restaurant.setLat(restaurantDto.getLat());
+        restaurant.setLon(restaurantDto.getLon());
         return restaurant;
     }
 
