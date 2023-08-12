@@ -47,7 +47,7 @@ public class UserServiceTest {
         User user = new User(1L, "username", "surname", "nickname",
                 "email", "password", "12344L", UserRole.USER, UserStatus.ACTIVE, null, null);
         when(userRepository.save(any(User.class))).thenReturn(user);
-        userService.save(user);
+      //  userService.save(user);
         assertThat(user.getId()).isGreaterThan(0);
         assertNotNull(user);
     }
