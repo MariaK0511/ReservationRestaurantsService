@@ -34,7 +34,7 @@ public class AdminInitializeService {
     }
 
     @PostConstruct
-    public User initAdmin() {
+    public void initAdmin() {
         User user = new User();
         user.setUserRole(UserRole.ADMIN);
         user.setUsername("Mary");
@@ -66,6 +66,5 @@ public class AdminInitializeService {
         review.setUser(user);
         review.setRestaurant(restaurant);
         reviewRepository.save(review);
-        return user;
     }
 }
