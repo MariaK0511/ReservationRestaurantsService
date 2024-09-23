@@ -4,6 +4,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.dto.UserDto;
+import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.service.ReservationService;
 import com.reservation_restaurants_service.service.UserService;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
@@ -39,10 +40,10 @@ public class UserController {
             @ApiResponse(code = 404, message = "Registration failed")
     })
     @PostMapping("/registration")
-    public ResponseEntity<UserDto> registration(@RequestBody UserDto userDto) {
-        userService.registration(userMapper.convertUserDtoToUser(userDto));
-        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-
+    public ResponseEntity<UserDto> registration(@RequestBody UserDto incomeUserDto) {
+        User savedUser = userMapper.convertUserDtoToUser(incomeUserDto);
+        UserDto registratedUserDto =  userService.registration(savedUser);
+        return new ResponseEntity<>(registratedUserDto, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "User login", notes = "User login via token")
