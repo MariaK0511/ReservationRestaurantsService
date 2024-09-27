@@ -18,7 +18,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UserDto {
     @Parameter(description = "User id")
-    private long id;
+    private Long id;
     @NotBlank(message = "Field cannot be empty")
     @Parameter(description = "User name")
     private String username;

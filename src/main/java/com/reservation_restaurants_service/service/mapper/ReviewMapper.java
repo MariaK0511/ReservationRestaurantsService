@@ -13,6 +13,7 @@ public class ReviewMapper {
                                            Restaurant restaurant,
                                            User user) {
         Review review = new Review();
+        review.setId(reviewDto.getId());
         review.setRestaurant(restaurant);
         review.setUser(user);
         review.setReview(reviewDto.getReview());

@@ -63,12 +63,13 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public void registration(User user) {
+    public UserDto registration(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUserStatus(UserStatus.ACTIVE);
         user.setPhoneNumber(correctionPhoneNumber.correctPhoneNumber(user.getPhoneNumber()));
         userRepository.save(user);
         logger.info("registration {} was successful", user.getUsername());
+        return userMapper.convertUserToUserDto(user);
     }
 
     public UserDto save(UserDto userDto) {
@@ -114,7 +115,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDto setRoleToUser(long id, UserRole userRole) {
+    public UserDto setRoleToUser(Long id, UserRole userRole) {
         Optional<User> userById = userRepository.findById(id);
         if (userById.isPresent()) {
             User user = userById.get();

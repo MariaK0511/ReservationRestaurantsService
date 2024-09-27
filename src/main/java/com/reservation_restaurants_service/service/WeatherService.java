@@ -11,7 +11,7 @@ public class WeatherService {
 
     public WeatherDto getWeather(double lat, double lon) {
         RestTemplate restTemplate = new RestTemplate();
-        String weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=bb0f178d94ee5ae0ab8a7ae0457ce5f1";
+        String weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid=512b76e9829320fd6be325dea985345e";
         ResponseEntity<OpenWeatherDto> response = restTemplate.getForEntity(weatherUrl, OpenWeatherDto.class, lat, lon);
         if (response.getBody() == null) {
             return null;

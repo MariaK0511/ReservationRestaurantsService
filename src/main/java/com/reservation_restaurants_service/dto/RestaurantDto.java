@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class RestaurantDto {
 
     @ApiModelProperty(notes = "Restaurant id")
-    private long id;
+    private Long id;
     @NotBlank(message = "Field cannot be empty")
     @ApiModelProperty(notes = "Restaurant name")
     private String name;

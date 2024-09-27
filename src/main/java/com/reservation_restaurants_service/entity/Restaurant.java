@@ -19,7 +19,7 @@ public class Restaurant extends AuditorEntities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private String address;
     private String phoneNumber;
