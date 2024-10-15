@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class ReviewDto {
     @Parameter(description = "Review id")
-    private long id;
+    private Long id;
     @Parameter(description = "User review for restaurant")
     private String review;
 }
