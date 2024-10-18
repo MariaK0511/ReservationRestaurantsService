@@ -15,6 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -75,5 +79,34 @@ public class ReviewServiceTest {
         assertNotNull(testReview);
     }
 
+    @Test
+    void findAllReviewsByUserId() throws Exception {
+        //given
+        Review testReview = getTestReview();
+        List<Review> reviews = new ArrayList<>();
+        //when
+        reviews.add(testReview);
+        //then
+        when(reviewRepository.findById(1L)).thenReturn(Optional.of(testReview));
+        reviewService.getAllReviewsByUserId(testUser.getId());
+        // assertEquals(1L, testReview.getId());
+        assertThat(testReview.getId()).isGreaterThan(0);
+        assertNotNull(testReview);
+    }
+
+    @Test
+    void getAllReviewsByRestaurantId() throws Exception{
+        //given
+        Review testReview = getTestReview();
+        List<Review> reviews = new ArrayList<>();
+        //when
+        reviews.add(testReview);
+        when(reviewRepository.findAll()).thenReturn(reviews);
+        reviewService.getAllReviewsByRestaurantId(testRestaurant.getId());
+        //then
+        // assertEquals(1L, testReview.getId());
+        assertThat(testReview.getId()).isGreaterThan(0);
+        assertNotNull(testReview);
+    }
 
 }
