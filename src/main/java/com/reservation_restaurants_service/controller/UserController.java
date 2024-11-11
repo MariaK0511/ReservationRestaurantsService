@@ -112,7 +112,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "The user's reservations are not found")
     })
     @GetMapping("/user/{userId}/reservations")
-    public ResponseEntity<List<ReservationDto>> showUsersReservations(@PathVariable("userId") long userId) {
+    public ResponseEntity<List<ReservationDto>> showUsersReservations(@PathVariable("userId") Long userId) {
         List<ReservationDto> reservationDtoList = reservationService.findAllReservationsByUserId(userId);
         return ok(reservationDtoList);
     }

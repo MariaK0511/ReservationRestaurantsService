@@ -1,6 +1,7 @@
 package com.reservation_restaurants_service.service.mapper;
 
 import com.reservation_restaurants_service.dto.RestaurantDto;
+import com.reservation_restaurants_service.dto.WeatherDto;
 import com.reservation_restaurants_service.entity.Restaurant;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ public class RestaurantMapper {
         restaurantDto.setRating(restaurant.getRating());
         restaurantDto.setLat(restaurant.getLat());
         restaurantDto.setLon(restaurant.getLon());
+        restaurantDto.setWeatherDto(new WeatherDto());
         return restaurantDto;
     }
 

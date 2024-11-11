@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import lombok.*;
 
 @Entity
+@EqualsAndHashCode(callSuper=false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

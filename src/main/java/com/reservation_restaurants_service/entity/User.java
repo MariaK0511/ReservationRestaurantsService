@@ -17,6 +17,7 @@ import lombok.*;
 //@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 @Data
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends AuditorEntities {

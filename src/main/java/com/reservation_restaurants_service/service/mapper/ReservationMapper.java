@@ -13,7 +13,11 @@ public class ReservationMapper {
                                                           Restaurant restaurant,
                                                           User user) {
         Reservation reservation = new Reservation();
+        reservation.setId(reservationDto.getId());
         reservation.setGuests(reservationDto.getGuests());
+        reservation.setCreationTime(reservationDto.getCreationTime());
+        reservation.setStatus(reservationDto.getStatus());
+        reservation.setTimeOfStatusChange(reservationDto.getTimeStatusChange());
         reservation.setRestaurant(restaurant);
         reservation.setUser(user);
         return reservation;
@@ -21,9 +25,8 @@ public class ReservationMapper {
 
     public ReservationDto convertReservationToReservationDto(Reservation reservation) {
         ReservationDto reservationDto = new ReservationDto();
-        reservationDto.setId(reservation.getId());
-        reservationDto.setCreationTime(reservation.getCreationTime());
         reservationDto.setGuests(reservation.getGuests());
+        reservationDto.setCreationTime(reservation.getCreationTime());
         reservationDto.setStatus(reservation.getStatus());
         reservationDto.setTimeStatusChange(reservation.getTimeOfStatusChange());
         return reservationDto;

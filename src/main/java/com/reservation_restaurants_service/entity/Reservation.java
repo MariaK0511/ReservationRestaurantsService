@@ -26,14 +26,14 @@ public class Reservation extends AuditorEntities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Restaurant restaurant;
+    private int guests;
     private LocalDateTime creationTime;
-    private long guests;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(name = "time_status_change")
     private LocalDateTime timeOfStatusChange;
+    @ManyToOne
+    private Restaurant restaurant;
     @ManyToOne
     private User user;
 }
