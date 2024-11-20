@@ -22,6 +22,7 @@ public class ReviewMapper {
 
     public ReviewDto convertReviewToReviewDto(Review review) {
         ReviewDto reviewDto = new ReviewDto();
+        reviewDto.setId(review.getId());
         reviewDto.setReview(review.getReview());
         return reviewDto;
     }

@@ -10,7 +10,7 @@ public class RestaurantMapper {
 
     public Restaurant convertRestaurantDtoToRestaurant(RestaurantDto restaurantDto) {
         Restaurant restaurant = new Restaurant();
-        restaurant.setId(restaurant.getId());
+        restaurant.setId(restaurantDto.getId());
         restaurant.setName(restaurantDto.getName());
         restaurant.setAddress(restaurantDto.getAddress());
         restaurant.setPhoneNumber(restaurantDto.getPhoneNumber());
@@ -29,7 +29,7 @@ public class RestaurantMapper {
         restaurantDto.setRating(restaurant.getRating());
         restaurantDto.setLat(restaurant.getLat());
         restaurantDto.setLon(restaurant.getLon());
-        restaurantDto.setWeatherDto(new WeatherDto());
+        restaurantDto.getWeatherDto();
         return restaurantDto;
     }
 

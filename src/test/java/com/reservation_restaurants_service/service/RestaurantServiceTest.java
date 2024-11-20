@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -32,6 +34,8 @@ public class RestaurantServiceTest {
     private CorrectionPhoneNumber correctionPhoneNumber;
     @Mock
     private WeatherService weatherService;
+    @Mock
+    private WeatherDto weatherDto;
 
     @BeforeEach
     void setUp() {
@@ -39,6 +43,7 @@ public class RestaurantServiceTest {
         restaurantMapper = Mockito.mock(RestaurantMapper.class);
         correctionPhoneNumber = Mockito.mock(CorrectionPhoneNumber.class);
         weatherService = Mockito.mock(WeatherService.class);
+        weatherDto = Mockito.mock(WeatherDto.class);
         restaurantService = new RestaurantService(restaurantRepository, restaurantMapper, correctionPhoneNumber, weatherService);
     }
 
@@ -62,60 +67,63 @@ public class RestaurantServiceTest {
                 0,
                 53.9006,
                 27.5590,
-                new WeatherDto()
+                weatherDto
         );
     }
 
     @Test
-    void givenRestaurant_whenCreateRestaurant_thenReturnSavedRestaurant() throws Exception {
+    void successfulSavedRestaurantIfInputRestaurantDataIsCorrect() throws Exception {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
         //when
         when(restaurantMapper.convertRestaurantDtoToRestaurant(testRestaurantDto)).thenReturn(testRestaurant);
-        when(restaurantRepository.save(Mockito.any(Restaurant.class))).thenReturn(testRestaurant);
         when(correctionPhoneNumber.correctPhoneNumber(testRestaurantDto.getPhoneNumber())).thenReturn(testRestaurantDto.getPhoneNumber());
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
-        restaurantService.save(testRestaurantDto);
+        RestaurantDto savedRestaurant = restaurantService.save(testRestaurantDto);
         //then
-        assertThat(testRestaurantDto.getId()).isGreaterThan(0);
-        assertNotNull(testRestaurantDto);
+        assertNotNull(savedRestaurant);
+        assertEquals(1L, savedRestaurant.getId());
     }
 
     @Test
-    void givenRestaurantId_whenGetRestaurantId_thenReturnRestaurant() throws Exception {
-        //given
-        Restaurant testRestaurant = getTestRestaurant();
-        //when
-        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
-        //then
-        restaurantService.findRestaurantById(testRestaurant.getId(), false);
-        assertThat(testRestaurant.getId()).isEqualTo(1L);
-        assertNotNull(testRestaurant);
-    }
-
-    @Test
-    void givenListOfRestaurants_whenGetAllRestaurants_thenReturnRestaurantList() throws NullPointerException {
-        //given
-        Restaurant testRestaurant = getTestRestaurant();
-        List<Restaurant> restaurants = new ArrayList<>();
-        //when
-        restaurants.add(testRestaurant);
-        //then
-        when(restaurantRepository.findAll()).thenReturn(restaurants);
-        restaurantService.findAllRestaurants();
-        assertThat(restaurants.size()).isGreaterThan(0);
-        assertNotNull(restaurants);
-    }
-
-    @Test
-    void givenUser_whenUpdateRestaurant_thenReturnUpdatedRestaurant() throws NullPointerException {
+    void successfulReturnRestaurantById() throws Exception {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
         //when
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
-        when(restaurantRepository.save(Mockito.any(Restaurant.class))).thenReturn(testRestaurant);
+        when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
+        when(weatherService.getWeather(testRestaurantDto.getLat(), testRestaurantDto.getLon())).thenReturn(weatherDto);
+        RestaurantDto foundRestaurant = restaurantService.findRestaurantById(testRestaurant.getId(), true);
+        //then
+        assertNotNull(foundRestaurant);
+        assertEquals(1L, foundRestaurant.getId());
+    }
+
+    @Test
+    void successfulReturnListOfRestaurants() throws Exception {
+        //given
+        Restaurant testRestaurant = getTestRestaurant();
+        RestaurantDto testRestaurantDto = getTestRestaurantDto();
+        List<Restaurant> restaurants = new ArrayList<>();
+        //when
+        restaurants.add(testRestaurant);
+        when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
+        when(restaurantRepository.findAll()).thenReturn(restaurants);
+        List<RestaurantDto> foundRestaurants = restaurantService.findAllRestaurants();
+        //then
+        assertNotNull(foundRestaurants);
+        assertThat(foundRestaurants.size()).isGreaterThan(0);
+    }
+
+    @Test
+    void successfulUpdateIncomingRestaurant() throws Exception {
+        //given
+        Restaurant testRestaurant = getTestRestaurant();
+        RestaurantDto testRestaurantDto = getTestRestaurantDto();
+        //when
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
         when(restaurantMapper.convertRestaurantDtoToRestaurantDto(testRestaurantDto, testRestaurantDto)).thenReturn(testRestaurantDto);
         testRestaurantDto.setPhoneNumber("375447733000");
@@ -124,17 +132,17 @@ public class RestaurantServiceTest {
         RestaurantDto updatedRestaurantDto = restaurantService.update(testRestaurantDto);
         //then
         assertNotNull(updatedRestaurantDto);
-        assertThat(updatedRestaurantDto).hasFieldOrPropertyWithValue("phoneNumber", "375447733000");
+        assertEquals("375447733000", updatedRestaurantDto.getPhoneNumber());
     }
 
     @Test
-    void givenUser_whenDeleteRestaurant() throws Exception {
+    void successfulDeleteRestaurantById() throws Exception {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         //when
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
+        restaurantService.delete(testRestaurant.getId());
         //then
-        Optional<Restaurant> savedRestaurant = Optional.of(testRestaurant);
-        savedRestaurant.ifPresent(value -> restaurantService.delete(value.getId()));
+        verify(restaurantRepository).delete(testRestaurant);
     }
 }

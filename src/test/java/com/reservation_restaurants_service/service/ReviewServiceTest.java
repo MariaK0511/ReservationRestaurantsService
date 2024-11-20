@@ -9,8 +9,8 @@ import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.ReviewRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
-import com.reservation_restaurants_service.service.mapper.RestaurantMapper;
 import com.reservation_restaurants_service.service.mapper.ReviewMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -88,7 +89,7 @@ public class ReviewServiceTest {
     User testUser = getTestUser();
 
     @Test
-    void givenReview_whenCreateReview_thenReturnSavedReview() throws Exception {
+    void successfulSavedReviewIfInputReviewDataIsCorrect() throws Exception {
         //given
         Review testReview = getTestReview();
         ReviewDto testReviewDto = getTestReviewDto();
@@ -96,76 +97,67 @@ public class ReviewServiceTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
         when(reviewMapper.convertReviewDtoToReview(testReviewDto, testRestaurant, testUser)).thenReturn(testReview);
-        when(reviewRepository.save(Mockito.any(Review.class))).thenReturn(testReview);
         when(reviewMapper.convertReviewToReviewDto(testReview)).thenReturn(testReviewDto);
-        reviewService.addReviewToRestaurant(testReviewDto, testUser.getId(), testRestaurant.getId());
+        ReviewDto savedReviewDto = reviewService.addReviewToRestaurant(testReviewDto, testUser.getId(), testRestaurant.getId());
         //then
-        assertThat(testReviewDto.getId()).isEqualTo(1L);
-        assertThat(testReviewDto.getId()).isGreaterThan(0);
-        assertNotNull(testReviewDto);
+        assertNotNull(savedReviewDto);
+        assertThat(savedReviewDto.getId()).isEqualTo(1L);
+        assertThat(savedReviewDto.getId()).isGreaterThan(0);
     }
 
     @Test
-    void givenReview_whenUpdateReview_thenReturnUpdatedReview() {
+    void successfulUpdateIncomingReview() {
         //given
-        Review testReview = getTestReview();
-        ReviewDto testReviewDto = getTestReviewDto();
+        Review incomingReview = getTestReview();
+        ReviewDto incomingReviewDto = getTestReviewDto();
         //when
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(testReview));
-        when(reviewMapper.convertReviewToReviewDto(testReview)).thenReturn(testReviewDto);
-        testReviewDto.setReview("bad service");
-        reviewService.update(testReviewDto, testReviewDto.getId());
-        when(reviewMapper.convertReviewDtoToReview(testReviewDto, testRestaurant, testUser)).thenReturn(testReview);
+        when(reviewRepository.findById(1L)).thenReturn(Optional.of(incomingReview));
+        when(reviewMapper.convertReviewToReviewDto(incomingReview)).thenReturn(incomingReviewDto);
+        incomingReviewDto.setReview("bad service");
+        ReviewDto updatedReview = reviewService.update(incomingReviewDto, incomingReviewDto.getId());
         //then
-        assertNotNull(testReview);
-        assertThat(testReview).hasFieldOrPropertyWithValue("review",  "bad service");
+        assertNotNull(updatedReview);
+        assertEquals("bad service", updatedReview.getReview());
     }
 
     @Test
-    void givenListOfReviews_whenGetAllReviews_thenReturnReviewsByUserId() throws Exception {
+    void getAllReviewsByUserId() throws Exception {
         //given
         Review testReview = getTestReview();
-        ReviewDto testReviewDto = getTestReviewDto();
         List<Review> reviews = new ArrayList<>();
         //when
         reviews.add(testReview);
-        when(reviewMapper.convertReviewToReviewDto(testReview)).thenReturn(testReviewDto);
         when(reviewRepository.findByUserId(1L)).thenReturn(reviews);
+        List<ReviewDto> foundReviews = reviewService.getAllReviewsByUserId(testUser.getId());
         //then
-        reviewService.getAllReviewsByUserId(testUser.getId());
-        assertThat(testReview.getId()).isEqualTo(1L);
-        assertThat(testReview.getId()).isGreaterThan(0);
-        assertNotNull(testReview);
+        assertNotNull(foundReviews);
+        assertThat(foundReviews.size()).isGreaterThan(0);
+        assertEquals(1, foundReviews.size());
     }
 
     @Test
-    void givenListOfReviews_whenGetAllReviews_thenReturnReviewsByRestaurantId() throws Exception {
+    void getAllReviewsByRestaurantId() throws Exception {
         //given
         Review testReview = getTestReview();
-        ReviewDto testReviewDto = getTestReviewDto();
         List<Review> reviews = new ArrayList<>();
         //when
         reviews.add(testReview);
-        when(reviewMapper.convertReviewToReviewDto(testReview)).thenReturn(testReviewDto);
         when(reviewRepository.findByRestaurantId(1L)).thenReturn(reviews);
-        reviewService.getAllReviewsByRestaurantId(testRestaurant.getId());
+        List<ReviewDto> foundReviews = reviewService.getAllReviewsByRestaurantId(testRestaurant.getId());
         //then
-        assertThat(testReview.getId()).isEqualTo(1L);
-        assertThat(testReview.getId()).isGreaterThan(0);
-        assertNotNull(testReview);
+        assertNotNull(foundReviews);
+        assertThat(foundReviews.size()).isGreaterThan(0);
+        Assertions.assertEquals(1, foundReviews.size());
     }
 
     @Test
-    void givenReview_whenDeleteReview() throws Exception {
+    void successfulDeleteReviewById() throws Exception {
         //given
         Review testReview = getTestReview();
-        List<Review> reviews = new ArrayList<>();
         //when
-        reviews.add(testReview);
         when(reviewRepository.findById(1L)).thenReturn(Optional.of(testReview));
-        //then
         reviewService.delete(testReview.getId());
-        List<Review> deletedReview = reviewRepository.findAll();
-        assertEquals(reviews.size() - 1, deletedReview.size());
+        //then
+        verify(reviewRepository).delete(testReview);
     }
 }

@@ -25,6 +25,7 @@ public class ReservationMapper {
 
     public ReservationDto convertReservationToReservationDto(Reservation reservation) {
         ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setId(reservation.getId());
         reservationDto.setGuests(reservation.getGuests());
         reservationDto.setCreationTime(reservation.getCreationTime());
         reservationDto.setStatus(reservation.getStatus());
