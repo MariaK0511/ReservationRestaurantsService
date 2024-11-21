@@ -6,19 +6,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper=false)
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Review extends AuditorEntities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String review;
     @ManyToOne
     private User user;

@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationDto {
     @ApiModelProperty(notes = "Reservation id")
-    private long id;
+    private Long id;
+    private int guests;
     @ApiModelProperty(notes = "Time of reservation")
     private LocalDateTime creationTime;
     @ApiModelProperty(notes = "Reservation status")
     private Status status;
     @ApiModelProperty(notes = "Time of status change")
     private LocalDateTime timeStatusChange;
-    private long guests;
 }

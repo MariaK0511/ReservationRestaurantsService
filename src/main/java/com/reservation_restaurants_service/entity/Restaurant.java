@@ -6,15 +6,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.lang.Object;
+
+import lombok.*;
 
 @Entity
 @Table(name = "restaurants")
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
+@AllArgsConstructor
 public class Restaurant extends AuditorEntities {
 
     @Id

@@ -1,7 +1,10 @@
 package com.reservation_restaurants_service.service;
 
+import com.reservation_restaurants_service.dto.ReservationDto;
 import com.reservation_restaurants_service.entity.Reservation;
+import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.entity.User;
+import com.reservation_restaurants_service.enums.Status;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.repository.ReservationRepository;
@@ -15,22 +18,25 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.testng.AssertJUnit.assertNotNull;
 
 @SpringBootTest
 class ReservationServiceTest {
-    @Mock
-    private ReservationRepository reservationRepository;
-
     @InjectMocks
     private ReservationService reservationService;
-
+    @Mock
+    private ReservationRepository reservationRepository;
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private RestaurantRepository restaurantRepository;
     @Mock
@@ -39,46 +45,168 @@ class ReservationServiceTest {
     @BeforeEach
     void setUp() {
         reservationRepository = Mockito.mock(ReservationRepository.class);
+        restaurantRepository = Mockito.mock(RestaurantRepository.class);
+        userRepository = Mockito.mock(UserRepository.class);
+        reservationMapper = Mockito.mock(ReservationMapper.class);
         reservationService = new ReservationService(reservationRepository, userRepository, reservationMapper, restaurantRepository);
     }
 
-//    void givenReservationToUser_whenCreateReservation_thenReturnSavedReservation() throws Exception {
-//        Reservation reservation = new Reservation();
-//        when(userRepository.save(any(User.class))).thenReturn(user);
-//        assertThat(user.getId()).isGreaterThan(0);
-//        userService.save(user);
-//        assertNotNull(user);
-//    }
+    private static Restaurant getTestRestaurant() {
+        return new Restaurant(
+                1L,
+                "ODI",
+                "prasp.Niezalieznasti 12",
+                "375447721212",
+                0,
+                53.9006,
+                27.5590);
+    }
 
-    @Test
-    void findReservationById() {
+    private static User getTestUser() {
+        return new User(
+                1L,
+                "Mike",
+                "Smith",
+                "MikeSmith",
+                "m.smith@gmail.com",
+                "12345678",
+                "375297658912",
+                UserRole.USER,
+                UserStatus.ACTIVE);
+    }
+
+    Restaurant testRestaurant = getTestRestaurant();
+    User testUser = getTestUser();
+
+    private static Reservation getReservation() {
+        return new Reservation(1L,
+                2,
+                LocalDateTime.now(),
+                Status.ACTIVE,
+                LocalDateTime.now(),
+                getTestRestaurant(),
+                getTestUser());
+    }
+
+    private static ReservationDto getTestReservationDto() {
+        return new ReservationDto(
+                1L,
+                2,
+                LocalDateTime.now(),
+                Status.ACTIVE,
+                LocalDateTime.now());
     }
 
     @Test
-    void findAllReservations() {
+    void successfulSavedReservationIfInputReservationDataIsCorrect() throws Exception {
+        //given
+        Reservation testReservation = getReservation();
+        ReservationDto testReservationDto = getTestReservationDto();
+        //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
+        when(reservationMapper.convertReservationDtoToReservation(testReservationDto, testRestaurant, testUser)).thenReturn(testReservation);
+        when(reservationMapper.convertReservationToReservationDto(testReservation)).thenReturn(testReservationDto);
+        ReservationDto savedReservationDto = reservationService.save(testReservationDto, testRestaurant.getId(), testUser.getId());
+        //then
+        assertNotNull(savedReservationDto);
+        assertEquals(1L, savedReservationDto.getId());
     }
 
     @Test
-    void update() {
+    void successfulReturnReservationById() {
+        //given
+        Reservation testReservation = getReservation();
+        ReservationDto testReservationDto = getTestReservationDto();
+        //when
+        when(reservationRepository.findById(1L)).thenReturn(Optional.of(testReservation));
+        when(reservationMapper.convertReservationToReservationDto(testReservation)).thenReturn(testReservationDto);
+        ReservationDto foundReservation = reservationService.findReservationById(testReservationDto.getId());
+        //then
+        assertNotNull(foundReservation);
+        assertEquals(1L, foundReservation.getId());
     }
 
     @Test
-    void delete() {
+    void successfulReturnListOfReservations() throws NullPointerException {
+        //given
+        Reservation testReservation = getReservation();
+        ReservationDto testReservationDto = getTestReservationDto();
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(testReservation);
+        //when
+        when(reservationRepository.findAll()).thenReturn(reservations);
+        when(reservationMapper.convertReservationToReservationDto(testReservation)).thenReturn(testReservationDto);
+        List<ReservationDto> foundReservations = reservationService.findAllReservations();
+        //then
+        assertNotNull(foundReservations);
+        assertThat(foundReservations.size()).isGreaterThan(0);
     }
 
     @Test
-    void findByUserId() {
+    void successfulUpdateIncomingReservation() {
+        //given
+        Reservation incomingReservation = getReservation();
+        ReservationDto incomingReservationDto = getTestReservationDto();
+        incomingReservationDto.setGuests(5);
+        //when
+        when(reservationRepository.findById(1L)).thenReturn(Optional.of(incomingReservation));
+        when(reservationMapper.convertReservationToReservationDto(incomingReservation)).thenReturn(incomingReservationDto);
+        ReservationDto updatedReservationDto = reservationService.update(incomingReservationDto, incomingReservationDto.getId());
+        //then
+        assertNotNull(updatedReservationDto);
+        assertThat(updatedReservationDto.getGuests()).isEqualTo(5);
     }
 
     @Test
-    void findAllReservationsByUserId() {
+    void successfulDeleteReservationById() throws Exception {
+        //given
+        Reservation testReservation = getReservation();
+        //when
+        when(reservationRepository.findById(1L)).thenReturn(Optional.of(testReservation));
+        reservationService.delete(testReservation.getId());
+        //then
+        verify(reservationRepository).delete(testReservation);
     }
 
     @Test
-    void findAllReservationsByRestaurantId() {
+    void getAllReservationsByUserId() {
+        //given
+        Reservation testReservation = getReservation();
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(testReservation);
+        //when
+        when(reservationRepository.findByUserId(1L)).thenReturn(reservations);
+        List<ReservationDto> foundReservations = reservationService.findAllReservationsByUserId(testUser.getId());
+        //then
+        assertNotNull(foundReservations);
+        assertEquals(1, foundReservations.size());
     }
 
     @Test
-    void setStatusToReservation() {
+    void getAllReservationsByRestaurantId() {
+        //given
+        Reservation testReservation = getReservation();
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(testReservation);
+        //when
+        when(reservationRepository.findByRestaurantId(1L)).thenReturn(reservations);
+        List<ReservationDto> foundReservations = reservationService.findAllReservationsByRestaurantId(testRestaurant.getId());
+        //then
+        assertNotNull(foundReservations);
+        assertEquals(1, foundReservations.size());
+    }
+
+    @Test
+    void successfulReturnReservationWithStatus() {
+        //given
+        Reservation testReservation = getReservation();
+        ReservationDto testReservationDto = getTestReservationDto();
+        //when
+        when(reservationRepository.findById(1L)).thenReturn(Optional.of(testReservation));
+        when(reservationMapper.convertReservationToReservationDto(testReservation)).thenReturn(testReservationDto);
+        ReservationDto reservationWithStatus = reservationService.setStatusToReservation(testReservationDto.getId(), Status.ACTIVE);
+        //then
+        assertEquals(Status.ACTIVE, reservationWithStatus.getStatus());
     }
 }

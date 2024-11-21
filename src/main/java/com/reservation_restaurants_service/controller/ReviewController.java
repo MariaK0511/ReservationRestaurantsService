@@ -39,7 +39,7 @@ public class ReviewController {
     @ApiOperation(value = "Update review by id", notes = "Return updated review as per the id")
     @PutMapping("/restaurant/review/{reviewId}")
     public ResponseEntity<ReviewDto> update(@RequestBody ReviewDto reviewDto,
-                                            @PathVariable("reviewId") long reviewId) {
+                                            @PathVariable("reviewId") Long reviewId) {
         reviewDto.setId(reviewId);
         ReviewDto editedReview = reviewService.update(reviewDto, reviewId);
         return new ResponseEntity<>(editedReview, OK);
@@ -47,7 +47,7 @@ public class ReviewController {
 
     @ApiOperation(value = "Delete review by id")
     @DeleteMapping("/restaurant/review/{reviewId}")
-    public ResponseEntity<ReviewDto> delete(@PathVariable("reviewId") long reviewId) {
+    public ResponseEntity<ReviewDto> delete(@PathVariable("reviewId") Long reviewId) {
         reviewService.delete(reviewId);
         return new ResponseEntity<>(OK);
     }

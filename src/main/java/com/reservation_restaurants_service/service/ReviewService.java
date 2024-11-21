@@ -52,7 +52,7 @@ public class ReviewService {
         throw new ReviewNotFoundException();
     }
 
-    public void delete(long id) {
+    public void delete(Long id) {
         Optional<Review> reviewById = reviewRepository.findById(id);
         if (reviewById.isPresent()) {
             reviewRepository.delete(reviewById.get());

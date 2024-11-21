@@ -11,28 +11,29 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.lang.Object;
+
+import lombok.*;
 
 @Entity
 @Table(name = "reservations")
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper=false)
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Reservation extends AuditorEntities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @ManyToOne
-    private Restaurant restaurant;
+    private Long id;
+    private int guests;
     private LocalDateTime creationTime;
-    private long guests;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(name = "time_status_change")
     private LocalDateTime timeOfStatusChange;
+    @ManyToOne
+    private Restaurant restaurant;
     @ManyToOne
     private User user;
 }

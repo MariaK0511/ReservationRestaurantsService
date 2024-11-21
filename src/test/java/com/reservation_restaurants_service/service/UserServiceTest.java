@@ -3,7 +3,7 @@ package com.reservation_restaurants_service.service;
 import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
-import com.reservation_restaurants_service.enums.UserStatus;;
+import com.reservation_restaurants_service.enums.UserStatus;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,96 +20,137 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 @SpringBootTest
 public class UserServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
-
     @InjectMocks
     private UserService userService;
     @Mock
+    private UserRepository userRepository;
+    @Mock
     private UserMapper userMapper;
+    @Mock
     private CorrectionPhoneNumber correctionPhoneNumber;
 
     @BeforeEach
     void setUp() {
         userRepository = Mockito.mock(UserRepository.class);
+        userMapper = Mockito.mock(UserMapper.class);
+        correctionPhoneNumber = Mockito.mock(CorrectionPhoneNumber.class);
         userService = new UserService(userRepository, userMapper, null, null, correctionPhoneNumber);
     }
 
-    @Test
-    void givenUser_whenCreateUser_thenReturnSavedUser() throws Exception {
-        User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", "12344L", UserRole.USER, UserStatus.ACTIVE, null, null);
-        when(userRepository.save(any(User.class))).thenReturn(user);
-      //  userService.save(user);
-        assertThat(user.getId()).isGreaterThan(0);
-        assertNotNull(user);
+    private static User getTestUser() {
+        return new User(
+                1L,
+                "Mike",
+                "Smith",
+                "MikeSmith",
+                "m.smith@gmail.com",
+                "12345678",
+                "375297658912",
+                UserRole.USER,
+                UserStatus.ACTIVE);
+    }
+
+    private static UserDto getTestUserDto() {
+        return new UserDto(
+                1L,
+                "Mike",
+                "Smith",
+                "MikeSmith",
+                "m.smith@gmail.com",
+                "12345678",
+                "375297658912",
+                UserRole.USER);
     }
 
     @Test
-    void givenUserId_whenGetUserId_thenReturnUser() throws Exception {
-        User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", "777", UserRole.USER, UserStatus.ACTIVE, null, null);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        userService.findUserById(user.getId());
-        assertThat(user.getId()).isEqualTo(1L);
-        assertNotNull(user);
-
+    void successfulSavedUserIfInputUserDataIsCorrect() throws Exception {
+        //given
+        User testUser = getTestUser();
+        UserDto testUserDto = getTestUserDto();
+        //when
+        when(userMapper.convertUserDtoToUser(testUserDto)).thenReturn(testUser);
+        when(userMapper.convertUserToUserDto(testUser)).thenReturn(testUserDto);
+        UserDto savedUserDto = userService.save(testUserDto);
+        //then
+        assertNotNull(savedUserDto);
+        assertEquals(1L, savedUserDto.getId());
     }
 
     @Test
-    void givenListOfUsers_whenGetAllUsers_thenReturnUserList() throws NullPointerException {
+    void successfulReturnUserById() throws Exception {
+        //given
+        User testUser = getTestUser();
+        UserDto testUserDto = getTestUserDto();
+        //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        when(userMapper.convertUserToUserDto(testUser)).thenReturn(testUserDto);
+        UserDto returnedUserDto = userService.findUserById(testUser.getId());
+        //then
+        assertNotNull(returnedUserDto);
+        assertEquals(1L, returnedUserDto.getId());
+    }
+
+    @Test
+    void successfulReturnListOfUsers() throws NullPointerException {
+        //given
+        User testUser = getTestUser();
+        UserDto testUserDto = getTestUserDto();
         List<User> users = new ArrayList<>();
-        users.add(new User());
+        users.add(testUser);
+        //when
         when(userRepository.findAll()).thenReturn(users);
-        userService.findAllUsers();
-        assertThat(users.size()).isGreaterThan(0);
-        assertNotNull(users);
+        when(userMapper.convertUserToUserDto(testUser)).thenReturn(testUserDto);
+        List<UserDto> foundUsers = userService.findAllUsers();
+        //then
+        assertNotNull(foundUsers);
+        assertThat(foundUsers.size()).isGreaterThan(0);
     }
 
     @Test
-    void givenUser_whenUpdateUser_thenReturnUpdatedUser() throws NullPointerException {
-        User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", "8766", UserRole.USER, UserStatus.ACTIVE, null, null);
-        user.setUsername("test username");
-        user.setSurname("test surname");
-        user.setEmail("test email");
-        user.setPassword("test password");
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        UserDto updatedUser = new UserDto(1L, "test username", "test surname", "test nickname",
-                "email", "password", "98", UserRole.USER);
-        UserDto resultUser = userService.update(updatedUser);
-        assertThat(updatedUser.getUsername()).isEqualTo(resultUser.getUsername());
-        assertThat(updatedUser.getSurname()).isEqualTo(resultUser.getSurname());
-        assertThat(updatedUser.getNickname()).isEqualTo(resultUser.getNickname());
-        assertThat(updatedUser.getEmail()).isEqualTo(resultUser.getEmail());
-        assertThat(updatedUser.getPassword()).isEqualTo(resultUser.getPassword());
-        assertNotNull(resultUser);
-        assertEquals(updatedUser.getId(), resultUser.getId());
+    void successfulUpdateIncomingUser() throws NullPointerException {
+        //given
+        User incomingUser = getTestUser();
+        UserDto incomingUserDto = getTestUserDto();
+        incomingUserDto.setPhoneNumber("375294448231");
+        //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(incomingUser));
+        when(userMapper.convertUserToUserDto(incomingUser)).thenReturn(incomingUserDto);
+        when(userMapper.convertUserDtoToUserDto(incomingUserDto, incomingUserDto)).thenReturn(incomingUserDto);
+        when(correctionPhoneNumber.correctPhoneNumber(incomingUserDto.getPhoneNumber())).thenReturn(incomingUserDto.getPhoneNumber());
+        when(userMapper.convertUserDtoToUser(incomingUserDto)).thenReturn(incomingUser);
+        UserDto updatedUserDto = userService.update(incomingUserDto);
+        //then
+        assertNotNull(updatedUserDto);
+        assertThat(updatedUserDto.getPhoneNumber()).isEqualTo("375294448231");
     }
 
     @Test
-    void givenUser_whenDeleteUser() throws Exception {
-        User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", "987", UserRole.USER, UserStatus.ACTIVE, null, null);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        Optional<User> savedUser = Optional.of(user);
-        savedUser.ifPresent(value -> userService.delete(value.getId()));
+    void successfulDeleteUserById() throws Exception {
+        //given
+        User testUser = getTestUser();
+        //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        userService.delete(testUser.getId());
+        //then
+        verify(userRepository).delete(testUser);
     }
 
     @Test
-    void givenUser_whenAddRoleToUser_returnUserWithRole() throws Exception {
-        User user = new User(1L, "username", "surname", "nickname",
-                "email", "password", "98", UserRole.USER, UserStatus.ACTIVE, null, null);
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        user.setUserRole(UserRole.MANAGER);
-        userService.setRoleToUser(user.getId(), UserRole.MANAGER);
-        when(userRepository.save(any(User.class))).thenReturn(user);
+    void successfulReturnUserWithRole() throws Exception {
+        //given
+        User testUser = getTestUser();
+        UserDto userWithOldRole = getTestUserDto();
+        userWithOldRole.setUserRole(UserRole.MANAGER);
+        //when
+        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+        when(userMapper.convertUserToUserDto(testUser)).thenReturn(userWithOldRole);
+        UserDto userWithNewRole = userService.setRoleToUser(userWithOldRole.getId(), UserRole.MANAGER);
+        //then
+        assertEquals(UserRole.MANAGER, userWithNewRole.getUserRole());
     }
 }
