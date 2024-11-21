@@ -111,7 +111,6 @@ class ReservationServiceTest {
         //then
         assertNotNull(savedReservationDto);
         assertEquals(1L, savedReservationDto.getId());
-        assertThat(savedReservationDto.getId()).isGreaterThan(0);
     }
 
     @Test
@@ -134,8 +133,8 @@ class ReservationServiceTest {
         Reservation testReservation = getReservation();
         ReservationDto testReservationDto = getTestReservationDto();
         List<Reservation> reservations = new ArrayList<>();
-        //when
         reservations.add(testReservation);
+        //when
         when(reservationRepository.findAll()).thenReturn(reservations);
         when(reservationMapper.convertReservationToReservationDto(testReservation)).thenReturn(testReservationDto);
         List<ReservationDto> foundReservations = reservationService.findAllReservations();
@@ -149,10 +148,10 @@ class ReservationServiceTest {
         //given
         Reservation incomingReservation = getReservation();
         ReservationDto incomingReservationDto = getTestReservationDto();
+        incomingReservationDto.setGuests(5);
         //when
         when(reservationRepository.findById(1L)).thenReturn(Optional.of(incomingReservation));
         when(reservationMapper.convertReservationToReservationDto(incomingReservation)).thenReturn(incomingReservationDto);
-        incomingReservationDto.setGuests(5);
         ReservationDto updatedReservationDto = reservationService.update(incomingReservationDto, incomingReservationDto.getId());
         //then
         assertNotNull(updatedReservationDto);
@@ -181,7 +180,6 @@ class ReservationServiceTest {
         List<ReservationDto> foundReservations = reservationService.findAllReservationsByUserId(testUser.getId());
         //then
         assertNotNull(foundReservations);
-        assertThat(foundReservations.size()).isGreaterThan(0);
         assertEquals(1, foundReservations.size());
     }
 
@@ -190,13 +188,12 @@ class ReservationServiceTest {
         //given
         Reservation testReservation = getReservation();
         List<Reservation> reservations = new ArrayList<>();
-        //when
         reservations.add(testReservation);
+        //when
         when(reservationRepository.findByRestaurantId(1L)).thenReturn(reservations);
         List<ReservationDto> foundReservations = reservationService.findAllReservationsByRestaurantId(testRestaurant.getId());
         //then
         assertNotNull(foundReservations);
-        assertThat(foundReservations.size()).isGreaterThan(0);
         assertEquals(1, foundReservations.size());
     }
 

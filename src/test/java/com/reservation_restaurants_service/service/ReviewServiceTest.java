@@ -102,7 +102,6 @@ public class ReviewServiceTest {
         //then
         assertNotNull(savedReviewDto);
         assertThat(savedReviewDto.getId()).isEqualTo(1L);
-        assertThat(savedReviewDto.getId()).isGreaterThan(0);
     }
 
     @Test
@@ -110,14 +109,14 @@ public class ReviewServiceTest {
         //given
         Review incomingReview = getTestReview();
         ReviewDto incomingReviewDto = getTestReviewDto();
+        incomingReviewDto.setReview("bad service");
         //when
         when(reviewRepository.findById(1L)).thenReturn(Optional.of(incomingReview));
         when(reviewMapper.convertReviewToReviewDto(incomingReview)).thenReturn(incomingReviewDto);
-        incomingReviewDto.setReview("bad service");
-        ReviewDto updatedReview = reviewService.update(incomingReviewDto, incomingReviewDto.getId());
+        ReviewDto updatedReviewDto = reviewService.update(incomingReviewDto, incomingReviewDto.getId());
         //then
-        assertNotNull(updatedReview);
-        assertEquals("bad service", updatedReview.getReview());
+        assertNotNull(updatedReviewDto);
+        assertEquals("bad service", updatedReviewDto.getReview());
     }
 
     @Test
@@ -125,13 +124,12 @@ public class ReviewServiceTest {
         //given
         Review testReview = getTestReview();
         List<Review> reviews = new ArrayList<>();
-        //when
         reviews.add(testReview);
+        //when
         when(reviewRepository.findByUserId(1L)).thenReturn(reviews);
         List<ReviewDto> foundReviews = reviewService.getAllReviewsByUserId(testUser.getId());
         //then
         assertNotNull(foundReviews);
-        assertThat(foundReviews.size()).isGreaterThan(0);
         assertEquals(1, foundReviews.size());
     }
 
@@ -140,14 +138,13 @@ public class ReviewServiceTest {
         //given
         Review testReview = getTestReview();
         List<Review> reviews = new ArrayList<>();
-        //when
         reviews.add(testReview);
+        //when
         when(reviewRepository.findByRestaurantId(1L)).thenReturn(reviews);
         List<ReviewDto> foundReviews = reviewService.getAllReviewsByRestaurantId(testRestaurant.getId());
         //then
         assertNotNull(foundReviews);
-        assertThat(foundReviews.size()).isGreaterThan(0);
-        Assertions.assertEquals(1, foundReviews.size());
+        assertEquals(1, foundReviews.size());
     }
 
     @Test

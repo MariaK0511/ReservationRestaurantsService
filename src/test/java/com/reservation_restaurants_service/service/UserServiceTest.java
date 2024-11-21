@@ -75,11 +75,10 @@ public class UserServiceTest {
         //when
         when(userMapper.convertUserDtoToUser(testUserDto)).thenReturn(testUser);
         when(userMapper.convertUserToUserDto(testUser)).thenReturn(testUserDto);
-        UserDto savedUser = userService.save(testUserDto);
+        UserDto savedUserDto = userService.save(testUserDto);
         //then
-        assertNotNull(savedUser);
-        assertEquals(1L, savedUser.getId());
-        assertThat(savedUser.getId()).isGreaterThan(0);
+        assertNotNull(savedUserDto);
+        assertEquals(1L, savedUserDto.getId());
     }
 
     @Test
@@ -90,10 +89,10 @@ public class UserServiceTest {
         //when
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userMapper.convertUserToUserDto(testUser)).thenReturn(testUserDto);
-        UserDto returnedUser = userService.findUserById(testUser.getId());
+        UserDto returnedUserDto = userService.findUserById(testUser.getId());
         //then
-        assertNotNull(returnedUser);
-        assertEquals(1L, returnedUser.getId());
+        assertNotNull(returnedUserDto);
+        assertEquals(1L, returnedUserDto.getId());
     }
 
     @Test
@@ -102,8 +101,8 @@ public class UserServiceTest {
         User testUser = getTestUser();
         UserDto testUserDto = getTestUserDto();
         List<User> users = new ArrayList<>();
-        //when
         users.add(testUser);
+        //when
         when(userRepository.findAll()).thenReturn(users);
         when(userMapper.convertUserToUserDto(testUser)).thenReturn(testUserDto);
         List<UserDto> foundUsers = userService.findAllUsers();
@@ -117,17 +116,17 @@ public class UserServiceTest {
         //given
         User incomingUser = getTestUser();
         UserDto incomingUserDto = getTestUserDto();
+        incomingUserDto.setPhoneNumber("375294448231");
         //when
         when(userRepository.findById(1L)).thenReturn(Optional.of(incomingUser));
         when(userMapper.convertUserToUserDto(incomingUser)).thenReturn(incomingUserDto);
         when(userMapper.convertUserDtoToUserDto(incomingUserDto, incomingUserDto)).thenReturn(incomingUserDto);
-        incomingUserDto.setPhoneNumber("375294448231");
         when(correctionPhoneNumber.correctPhoneNumber(incomingUserDto.getPhoneNumber())).thenReturn(incomingUserDto.getPhoneNumber());
         when(userMapper.convertUserDtoToUser(incomingUserDto)).thenReturn(incomingUser);
-        UserDto updatedUser = userService.update(incomingUserDto);
+        UserDto updatedUserDto = userService.update(incomingUserDto);
         //then
-        assertNotNull(updatedUser);
-        assertThat(updatedUser.getPhoneNumber()).isEqualTo("375294448231");
+        assertNotNull(updatedUserDto);
+        assertThat(updatedUserDto.getPhoneNumber()).isEqualTo("375294448231");
     }
 
     @Test
@@ -146,10 +145,10 @@ public class UserServiceTest {
         //given
         User testUser = getTestUser();
         UserDto userWithOldRole = getTestUserDto();
+        userWithOldRole.setUserRole(UserRole.MANAGER);
         //when
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userMapper.convertUserToUserDto(testUser)).thenReturn(userWithOldRole);
-        userWithOldRole.setUserRole(UserRole.MANAGER);
         UserDto userWithNewRole = userService.setRoleToUser(userWithOldRole.getId(), UserRole.MANAGER);
         //then
         assertEquals(UserRole.MANAGER, userWithNewRole.getUserRole());

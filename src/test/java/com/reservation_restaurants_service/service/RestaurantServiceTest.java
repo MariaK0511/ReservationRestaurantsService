@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,14 +79,14 @@ public class RestaurantServiceTest {
         when(restaurantMapper.convertRestaurantDtoToRestaurant(testRestaurantDto)).thenReturn(testRestaurant);
         when(correctionPhoneNumber.correctPhoneNumber(testRestaurantDto.getPhoneNumber())).thenReturn(testRestaurantDto.getPhoneNumber());
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
-        RestaurantDto savedRestaurant = restaurantService.save(testRestaurantDto);
+        RestaurantDto savedRestaurantDto = restaurantService.save(testRestaurantDto);
         //then
-        assertNotNull(savedRestaurant);
-        assertEquals(1L, savedRestaurant.getId());
+        assertNotNull(savedRestaurantDto);
+        assertEquals(1L, savedRestaurantDto.getId());
     }
 
     @Test
-    void successfulReturnRestaurantById() throws Exception {
+    void successfulReturnRestaurantByIdWithWeather() throws Exception {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
@@ -95,10 +94,28 @@ public class RestaurantServiceTest {
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
         when(weatherService.getWeather(testRestaurantDto.getLat(), testRestaurantDto.getLon())).thenReturn(weatherDto);
-        RestaurantDto foundRestaurant = restaurantService.findRestaurantById(testRestaurant.getId(), true);
+        RestaurantDto foundRestaurantDto = restaurantService.findRestaurantById(testRestaurant.getId(), true);
         //then
-        assertNotNull(foundRestaurant);
-        assertEquals(1L, foundRestaurant.getId());
+        assertNotNull(foundRestaurantDto);
+        assertEquals(1L, foundRestaurantDto.getId());
+        assertThat(foundRestaurantDto.getWeatherDto()).isEqualTo(weatherDto);
+    }
+
+    @Test
+    void successfulReturnRestaurantByIdWithoutWeather() throws Exception {
+        //given
+        Restaurant testRestaurant = getTestRestaurant();
+        RestaurantDto testRestaurantDto = getTestRestaurantDto();
+        boolean wantWeather;
+        //when
+        when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
+        when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
+        when(weatherService.getWeather(testRestaurantDto.getLat(), testRestaurantDto.getLon())).thenReturn(weatherDto);
+        RestaurantDto foundRestaurantDto = restaurantService.findRestaurantById(testRestaurant.getId(), false);
+        //then
+        assertNotNull(foundRestaurantDto);
+        assertEquals(1L, foundRestaurantDto.getId());
+        assertThat(restaurantService.findRestaurantById(foundRestaurantDto.getId(), false).equals(false));
     }
 
     @Test
@@ -107,8 +124,8 @@ public class RestaurantServiceTest {
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
         List<Restaurant> restaurants = new ArrayList<>();
-        //when
         restaurants.add(testRestaurant);
+        //when
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
         when(restaurantRepository.findAll()).thenReturn(restaurants);
         List<RestaurantDto> foundRestaurants = restaurantService.findAllRestaurants();
@@ -122,11 +139,11 @@ public class RestaurantServiceTest {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
+        testRestaurantDto.setPhoneNumber("375447733000");
         //when
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
         when(restaurantMapper.convertRestaurantDtoToRestaurantDto(testRestaurantDto, testRestaurantDto)).thenReturn(testRestaurantDto);
-        testRestaurantDto.setPhoneNumber("375447733000");
         when(correctionPhoneNumber.correctPhoneNumber(testRestaurantDto.getPhoneNumber())).thenReturn(testRestaurantDto.getPhoneNumber());
         when(restaurantMapper.convertRestaurantDtoToRestaurant(testRestaurantDto)).thenReturn(testRestaurant);
         RestaurantDto updatedRestaurantDto = restaurantService.update(testRestaurantDto);
