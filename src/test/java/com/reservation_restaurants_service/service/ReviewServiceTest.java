@@ -6,11 +6,11 @@ import com.reservation_restaurants_service.entity.Review;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
+import com.reservation_restaurants_service.exception.ReviewNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.ReviewRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.ReviewMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.testng.AssertJUnit.assertEquals;
@@ -89,7 +90,7 @@ public class ReviewServiceTest {
     User testUser = getTestUser();
 
     @Test
-    void successfulSavedReviewIfInputReviewDataIsCorrect() throws Exception {
+    void successfulSavedReviewIfInputReviewDataIsCorrect() {
         //given
         Review testReview = getTestReview();
         ReviewDto testReviewDto = getTestReviewDto();
@@ -102,6 +103,34 @@ public class ReviewServiceTest {
         //then
         assertNotNull(savedReviewDto);
         assertThat(savedReviewDto.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void getAllReviewsByUserId() {
+        //given
+        Review testReview = getTestReview();
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(testReview);
+        //when
+        when(reviewRepository.findByUserId(1L)).thenReturn(reviews);
+        List<ReviewDto> foundReviews = reviewService.getAllReviewsByUserId(testUser.getId());
+        //then
+        assertNotNull(foundReviews);
+        assertEquals(1, foundReviews.size());
+    }
+
+    @Test
+    void getAllReviewsByRestaurantId() {
+        //given
+        Review testReview = getTestReview();
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(testReview);
+        //when
+        when(reviewRepository.findByRestaurantId(1L)).thenReturn(reviews);
+        List<ReviewDto> foundReviews = reviewService.getAllReviewsByRestaurantId(testRestaurant.getId());
+        //then
+        assertNotNull(foundReviews);
+        assertEquals(1, foundReviews.size());
     }
 
     @Test
@@ -120,35 +149,18 @@ public class ReviewServiceTest {
     }
 
     @Test
-    void getAllReviewsByUserId() throws Exception {
+    void throwExceptionIfUpdateNonExistentReview() {
         //given
-        Review testReview = getTestReview();
-        List<Review> reviews = new ArrayList<>();
-        reviews.add(testReview);
+        ReviewDto nonExistentReview = new ReviewDto();
+        nonExistentReview.setId(100L);
         //when
-        when(reviewRepository.findByUserId(1L)).thenReturn(reviews);
-        List<ReviewDto> foundReviews = reviewService.getAllReviewsByUserId(testUser.getId());
+        when(reviewRepository.existsById(nonExistentReview.getId())).thenReturn(false);
         //then
-        assertNotNull(foundReviews);
-        assertEquals(1, foundReviews.size());
+        assertThrows(ReviewNotFoundException.class, () -> reviewService.update(nonExistentReview, nonExistentReview.getId()));
     }
 
     @Test
-    void getAllReviewsByRestaurantId() throws Exception {
-        //given
-        Review testReview = getTestReview();
-        List<Review> reviews = new ArrayList<>();
-        reviews.add(testReview);
-        //when
-        when(reviewRepository.findByRestaurantId(1L)).thenReturn(reviews);
-        List<ReviewDto> foundReviews = reviewService.getAllReviewsByRestaurantId(testRestaurant.getId());
-        //then
-        assertNotNull(foundReviews);
-        assertEquals(1, foundReviews.size());
-    }
-
-    @Test
-    void successfulDeleteReviewById() throws Exception {
+    void successfulDeleteReviewById() {
         //given
         Review testReview = getTestReview();
         //when
@@ -156,5 +168,15 @@ public class ReviewServiceTest {
         reviewService.delete(testReview.getId());
         //then
         verify(reviewRepository).delete(testReview);
+    }
+
+    @Test
+    void throwExceptionIfDeleteNonExistentReviewById() {
+        //given
+        Long nonExistentId = 100L;
+        //when
+        when(reviewRepository.existsById(nonExistentId)).thenReturn(false);
+        //then
+        assertThrows(ReviewNotFoundException.class, () -> reviewService.delete(nonExistentId));
     }
 }

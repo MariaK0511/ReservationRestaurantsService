@@ -7,6 +7,7 @@ import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.Status;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
+import com.reservation_restaurants_service.exception.ReservationNotFoundException;
 import com.reservation_restaurants_service.repository.ReservationRepository;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
@@ -25,7 +26,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testng.AssertJUnit.assertNotNull;
 
@@ -98,7 +98,7 @@ class ReservationServiceTest {
     }
 
     @Test
-    void successfulSavedReservationIfInputReservationDataIsCorrect() throws Exception {
+    void successfulSavedReservationIfInputReservationDataIsCorrect() {
         //given
         Reservation testReservation = getReservation();
         ReservationDto testReservationDto = getTestReservationDto();
@@ -125,6 +125,16 @@ class ReservationServiceTest {
         //then
         assertNotNull(foundReservation);
         assertEquals(1L, foundReservation.getId());
+    }
+
+    @Test
+    void throwExceptionIfReturnNonExistentReservationById() {
+        //given
+        Long nonExistentId = 100L;
+        //when
+        when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
+        //then
+        assertThrows(ReservationNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
     }
 
     @Test
@@ -159,7 +169,18 @@ class ReservationServiceTest {
     }
 
     @Test
-    void successfulDeleteReservationById() throws Exception {
+    void throwExceptionIfUpdateNonExistentReservationById() {
+        //given
+        ReservationDto nonExistentReservation = new ReservationDto();
+        nonExistentReservation.setId(100L);
+        //when
+        when(reservationRepository.existsById(nonExistentReservation.getId())).thenReturn(false);
+        //then
+        assertThrows(ReservationNotFoundException.class, () -> reservationService.update(nonExistentReservation, nonExistentReservation.getId()));
+    }
+
+    @Test
+    void successfulDeleteReservationById() {
         //given
         Reservation testReservation = getReservation();
         //when
@@ -167,6 +188,16 @@ class ReservationServiceTest {
         reservationService.delete(testReservation.getId());
         //then
         verify(reservationRepository).delete(testReservation);
+    }
+
+    @Test
+    void throwExceptionIfDeleteNonExistentReservationById() {
+        //given
+        Long nonExistentId = 100L;
+        //when
+        when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
+        //then
+        assertThrows(ReservationNotFoundException.class, () -> reservationService.delete(nonExistentId));
     }
 
     @Test
@@ -208,5 +239,15 @@ class ReservationServiceTest {
         ReservationDto reservationWithStatus = reservationService.setStatusToReservation(testReservationDto.getId(), Status.ACTIVE);
         //then
         assertEquals(Status.ACTIVE, reservationWithStatus.getStatus());
+    }
+
+    @Test
+    void throwExceptionIfAddStatusNonExistentReservation() {
+        //given
+        long nonExistentId = 100L;
+        //when
+        when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
+        //then
+        assertThrows(ReservationNotFoundException.class, () -> reservationService.setStatusToReservation(nonExistentId, Status.ACTIVE));
     }
 }

@@ -88,14 +88,6 @@ public class ReservationService {
         }
     }
 
-//    public List<ReservationDto> findByUserId(long id) {
-//        List<Reservation> reservations = reservationRepository.findByUserId(id);
-//        List<ReservationDto> reservationDtoList = new ArrayList<>();
-//        reservations.forEach(reservation -> reservationDtoList
-//                .add(reservationMapper.convertReservationToReservationDto(reservation)));
-//        return reservationDtoList;
-//    }
-
     public List<ReservationDto> findAllReservationsByUserId(long userId) {
         return reservationRepository.findByUserId(userId)
                                     .stream()

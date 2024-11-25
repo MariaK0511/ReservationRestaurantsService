@@ -3,6 +3,7 @@ package com.reservation_restaurants_service.service;
 import com.reservation_restaurants_service.dto.RestaurantDto;
 import com.reservation_restaurants_service.dto.WeatherDto;
 import com.reservation_restaurants_service.entity.Restaurant;
+import com.reservation_restaurants_service.exception.RestaurantNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.service.mapper.RestaurantMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +72,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    void successfulSavedRestaurantIfInputRestaurantDataIsCorrect() throws Exception {
+    void successfulSavedRestaurantIfInputRestaurantDataIsCorrect() {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
@@ -86,7 +87,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    void successfulReturnRestaurantByIdWithWeather() throws Exception {
+    void successfulReturnRestaurantByIdWithWeather() {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
@@ -102,7 +103,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    void successfulReturnRestaurantByIdWithoutWeather() throws Exception {
+    void successfulReturnRestaurantByIdWithoutWeather() {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
@@ -110,16 +111,27 @@ public class RestaurantServiceTest {
         //when
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
-        when(weatherService.getWeather(testRestaurantDto.getLat(), testRestaurantDto.getLon())).thenReturn(weatherDto);
+        // when(weatherService.getWeather(testRestaurantDto.getLat(), testRestaurantDto.getLon())).thenReturn(weatherDto);
         RestaurantDto foundRestaurantDto = restaurantService.findRestaurantById(testRestaurant.getId(), false);
         //then
         assertNotNull(foundRestaurantDto);
         assertEquals(1L, foundRestaurantDto.getId());
-        assertThat(restaurantService.findRestaurantById(foundRestaurantDto.getId(), false).equals(false));
+        //  assertThat(foundRestaurantDto.getWeatherDto()).isEqualTo(false); //it doesn't work, why?
     }
 
     @Test
-    void successfulReturnListOfRestaurants() throws Exception {
+    void throwExceptionIfReturnNonExistentRestaurantById() {
+        //given
+        RestaurantDto nonExistentRestaurant = new RestaurantDto();
+        nonExistentRestaurant.setId(100L);
+        //when
+        when(restaurantRepository.existsById(nonExistentRestaurant.getId())).thenReturn(false);
+        //then
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.findRestaurantById(nonExistentRestaurant.getId(), false));
+    }
+
+    @Test
+    void successfulReturnListOfRestaurants() {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
@@ -135,7 +147,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    void successfulUpdateIncomingRestaurant() throws Exception {
+    void successfulUpdateIncomingRestaurant() {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
@@ -153,7 +165,18 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    void successfulDeleteRestaurantById() throws Exception {
+    void throwExceptionIfUpdateNonExistentRestaurant() {
+        //given
+        RestaurantDto nonExistentRestaurant = new RestaurantDto();
+        nonExistentRestaurant.setId(100L);
+        //when
+        when(restaurantRepository.existsById(100L)).thenReturn(false);
+        //then
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.update(nonExistentRestaurant));
+    }
+
+    @Test
+    void successfulDeleteRestaurantById() {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         //when
@@ -161,5 +184,16 @@ public class RestaurantServiceTest {
         restaurantService.delete(testRestaurant.getId());
         //then
         verify(restaurantRepository).delete(testRestaurant);
+    }
+
+    @Test
+    void throwExceptionIfDeleteNonExistentRestaurantById() {
+        //given
+        RestaurantDto nonExistentRestaurant = new RestaurantDto();
+        nonExistentRestaurant.setId(100L);
+        //when
+        when(restaurantRepository.existsById(nonExistentRestaurant.getId())).thenReturn(false);
+        //then
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.delete(nonExistentRestaurant.getId()));
     }
 }
