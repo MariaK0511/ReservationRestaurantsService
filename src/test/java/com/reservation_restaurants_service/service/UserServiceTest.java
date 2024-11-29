@@ -4,6 +4,7 @@ import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
+import com.reservation_restaurants_service.exception.UserNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,32 +44,15 @@ public class UserServiceTest {
     }
 
     private static User getTestUser() {
-        return new User(
-                1L,
-                "Mike",
-                "Smith",
-                "MikeSmith",
-                "m.smith@gmail.com",
-                "12345678",
-                "375297658912",
-                UserRole.USER,
-                UserStatus.ACTIVE);
+        return new User(1L, "Mike", "Smith", "MikeSmith", "m.smith@gmail.com", "12345678", "375297658912", UserRole.USER, UserStatus.ACTIVE);
     }
 
     private static UserDto getTestUserDto() {
-        return new UserDto(
-                1L,
-                "Mike",
-                "Smith",
-                "MikeSmith",
-                "m.smith@gmail.com",
-                "12345678",
-                "375297658912",
-                UserRole.USER);
+        return new UserDto(1L, "Mike", "Smith", "MikeSmith", "m.smith@gmail.com", "12345678", "375297658912", UserRole.USER);
     }
 
     @Test
-    void successfulSavedUserIfInputUserDataIsCorrect() throws Exception {
+    void successfulSavedUserIfInputUserDataIsCorrect() {
         //given
         User testUser = getTestUser();
         UserDto testUserDto = getTestUserDto();
@@ -82,7 +66,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void successfulReturnUserById() throws Exception {
+    void successfulReturnUserById() {
         //given
         User testUser = getTestUser();
         UserDto testUserDto = getTestUserDto();
@@ -93,6 +77,16 @@ public class UserServiceTest {
         //then
         assertNotNull(returnedUserDto);
         assertEquals(1L, returnedUserDto.getId());
+    }
+
+    @Test
+    void throwExceptionIfReturnNonExistentUserById() {
+        //given
+        Long nonExistentId = 100L;
+        //when
+        when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+        //then
+        assertThrows(UserNotFoundException.class, () -> userService.findUserById(nonExistentId));
     }
 
     @Test
@@ -130,7 +124,18 @@ public class UserServiceTest {
     }
 
     @Test
-    void successfulDeleteUserById() throws Exception {
+    void throwExceptionIfUpdateNonExistentUser() {
+        //given
+        UserDto nonExistentUser = new UserDto();
+        nonExistentUser.setId(100L);
+        //when
+        when(userRepository.existsById(nonExistentUser.getId())).thenReturn(false);
+        //then
+        assertThrows(UserNotFoundException.class, () -> userService.update(nonExistentUser));
+    }
+
+    @Test
+    void successfulDeleteUserById() {
         //given
         User testUser = getTestUser();
         //when
@@ -141,7 +146,17 @@ public class UserServiceTest {
     }
 
     @Test
-    void successfulReturnUserWithRole() throws Exception {
+    void throwExceptionIfDeleteNonExistentUserById() {
+        //given
+        Long nonExistentId = 100L;
+        //when
+        when(userRepository.existsById(nonExistentId)).thenReturn(false);
+        //then
+        assertThrows(UserNotFoundException.class, () -> userService.delete(nonExistentId));
+    }
+
+    @Test
+    void successfulReturnUserWithRole() {
         //given
         User testUser = getTestUser();
         UserDto userWithOldRole = getTestUserDto();
@@ -152,5 +167,15 @@ public class UserServiceTest {
         UserDto userWithNewRole = userService.setRoleToUser(userWithOldRole.getId(), UserRole.MANAGER);
         //then
         assertEquals(UserRole.MANAGER, userWithNewRole.getUserRole());
+    }
+
+    @Test
+    void throwExceptionIfAddRoleToNonExistentUser() {
+        //given
+        Long nonExistentId = 100L;
+        //when
+        when(userRepository.existsById(nonExistentId)).thenReturn(false);
+        //then
+        assertThrows(UserNotFoundException.class, () -> userService.setRoleToUser(100L, UserRole.USER));
     }
 }

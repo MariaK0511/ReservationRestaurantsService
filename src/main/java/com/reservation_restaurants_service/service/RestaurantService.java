@@ -77,7 +77,7 @@ public class RestaurantService {
             restaurantRepository.delete(restaurantById.get());
             logger.info("restaurant {} was deleted", restaurantById.get().getName());
         } else {
-            throw new ReservationNotFoundException();
+            throw new RestaurantNotFoundException();
         }
     }
 }
