@@ -107,16 +107,14 @@ public class RestaurantServiceTest {
         //given
         Restaurant testRestaurant = getTestRestaurant();
         RestaurantDto testRestaurantDto = getTestRestaurantDto();
-        boolean wantWeather;
         //when
         when(restaurantRepository.findById(1L)).thenReturn(Optional.of(testRestaurant));
         when(restaurantMapper.convertRestaurantToRestaurantDto(testRestaurant)).thenReturn(testRestaurantDto);
-        // when(weatherService.getWeather(testRestaurantDto.getLat(), testRestaurantDto.getLon())).thenReturn(weatherDto);
         RestaurantDto foundRestaurantDto = restaurantService.findRestaurantById(testRestaurant.getId(), false);
         //then
         assertNotNull(foundRestaurantDto);
         assertEquals(1L, foundRestaurantDto.getId());
-        //  assertThat(foundRestaurantDto.getWeatherDto()).isEqualTo(false); //it doesn't work, why?
+        assertNull(weatherDto.getTypeOfWeather());
     }
 
     @Test
