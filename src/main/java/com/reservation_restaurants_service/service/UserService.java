@@ -6,7 +6,7 @@ import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
-import com.reservation_restaurants_service.exception.UserNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
 import java.util.List;
@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
         if (userById.isPresent()) {
             return userMapper.convertUserToUserDto(userById.get());
         } else {
-            throw new UserNotFoundException();
+            throw ResourceNotFoundException.of(User.class, id);
         }
     }
 
@@ -111,7 +111,7 @@ public class UserService implements UserDetailsService {
             logger.info("user {} was deleted", userById.get().getNickname());
         } else {
             logger.warn("such user couldn't find");
-            throw new UserNotFoundException();
+            throw ResourceNotFoundException.of(User.class, id);
         }
     }
 
@@ -124,6 +124,6 @@ public class UserService implements UserDetailsService {
             logger.info("role {} for {} was set up", user.getUserRole(), user.getNickname());
             return userMapper.convertUserToUserDto(user);
         }
-        throw new UserNotFoundException();
+        throw ResourceNotFoundException.of(User.class, id);
     }
 }

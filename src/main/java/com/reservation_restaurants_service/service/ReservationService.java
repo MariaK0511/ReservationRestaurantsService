@@ -5,13 +5,12 @@ import com.reservation_restaurants_service.entity.Reservation;
 import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.Status;
-import com.reservation_restaurants_service.exception.ReservationNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.ReservationRepository;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.ReservationMapper;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,7 +54,7 @@ public class ReservationService {
         if (reservationById.isPresent()) {
             return reservationMapper.convertReservationToReservationDto(reservationById.get());
         } else {
-            throw new ReservationNotFoundException();
+            throw ResourceNotFoundException.of(Reservation.class, id);
         }
     }
 
@@ -75,7 +74,7 @@ public class ReservationService {
             logger.info("reservation  was updated");
             return reservationMapper.convertReservationToReservationDto(editedReservation);
         }
-        throw new ReservationNotFoundException();
+        throw ResourceNotFoundException.of(Reservation.class, id);
     }
 
     public void delete(Long id) {
@@ -84,7 +83,7 @@ public class ReservationService {
             reservationRepository.delete(reservationById.get());
             logger.info("reservation  was deleted");
         } else {
-            throw new ReservationNotFoundException();
+            throw ResourceNotFoundException.of(Reservation.class, id);
         }
     }
 
@@ -112,6 +111,6 @@ public class ReservationService {
             logger.info("status {} for reservation was added", reservation.getStatus());
             return reservationMapper.convertReservationToReservationDto(reservation);
         }
-        throw new ReservationNotFoundException();
+        throw ResourceNotFoundException.of(Reservation.class, id);
     }
 }

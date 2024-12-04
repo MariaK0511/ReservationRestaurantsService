@@ -3,13 +3,14 @@ package com.reservation_restaurants_service.service;
 import com.reservation_restaurants_service.dto.RestaurantDto;
 import com.reservation_restaurants_service.dto.WeatherDto;
 import com.reservation_restaurants_service.entity.Restaurant;
-import com.reservation_restaurants_service.exception.ReservationNotFoundException;
-import com.reservation_restaurants_service.exception.RestaurantNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.service.mapper.RestaurantMapper;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,15 +52,15 @@ public class RestaurantService {
             }
             return restaurantDto;
         } else {
-            throw new RestaurantNotFoundException();
+            throw ResourceNotFoundException.of(Restaurant.class, id);
         }
     }
 
     public List<RestaurantDto> findAllRestaurants() {
         return restaurantRepository.findAll()
-                                   .stream()
-                                   .map(restaurantMapper::convertRestaurantToRestaurantDto)
-                                   .collect(Collectors.toList());
+                .stream()
+                .map(restaurantMapper::convertRestaurantToRestaurantDto)
+                .collect(Collectors.toList());
     }
 
     public RestaurantDto update(RestaurantDto incomeRestaurantDto) {
@@ -77,7 +78,7 @@ public class RestaurantService {
             restaurantRepository.delete(restaurantById.get());
             logger.info("restaurant {} was deleted", restaurantById.get().getName());
         } else {
-            throw new RestaurantNotFoundException();
+            throw ResourceNotFoundException.of(Restaurant.class, id);
         }
     }
 }
