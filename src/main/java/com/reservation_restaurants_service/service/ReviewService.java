@@ -4,7 +4,7 @@ import com.reservation_restaurants_service.dto.ReviewDto;
 import com.reservation_restaurants_service.entity.Restaurant;
 import com.reservation_restaurants_service.entity.Review;
 import com.reservation_restaurants_service.entity.User;
-import com.reservation_restaurants_service.exception.ReviewNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.ReviewRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
@@ -49,7 +49,7 @@ public class ReviewService {
             logger.info("review  was updated");
             return reviewMapper.convertReviewToReviewDto(editedReview);
         }
-        throw new ReviewNotFoundException();
+        throw ResourceNotFoundException.of(Review.class, id);
     }
 
     public void delete(Long id) {
@@ -58,7 +58,7 @@ public class ReviewService {
             reviewRepository.delete(reviewById.get());
             logger.info("{} was deleted", reviewById.get().getReview());
         } else {
-            throw new ReviewNotFoundException();
+            throw ResourceNotFoundException.of(Review.class, id);
         }
     }
 
