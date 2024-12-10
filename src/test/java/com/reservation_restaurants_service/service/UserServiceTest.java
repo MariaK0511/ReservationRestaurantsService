@@ -86,7 +86,6 @@ public class UserServiceTest {
         //when
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
         //then
-        //       assertThrows(UserNotFoundException.class, () -> userService.findUserById(nonExistentId));
         assertThrows(ResourceNotFoundException.class, () -> userService.findUserById(nonExistentId));
     }
 
@@ -132,7 +131,6 @@ public class UserServiceTest {
         //when
         when(userRepository.existsById(nonExistentUser.getId())).thenReturn(false);
         //then
-//        assertThrows(UserNotFoundException.class, () -> userService.update(nonExistentUser));
         assertThrows(ResourceNotFoundException.class, () -> userService.update(nonExistentUser));
     }
 
@@ -154,7 +152,6 @@ public class UserServiceTest {
         //when
         when(userRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-//        assertThrows(UserNotFoundException.class, () -> userService.delete(nonExistentId));
         assertThrows(ResourceNotFoundException.class, () -> userService.delete(nonExistentId));
     }
 
@@ -179,7 +176,6 @@ public class UserServiceTest {
         //when
         when(userRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-//        assertThrows(UserNotFoundException.class, () -> userService.setRoleToUser(100L, UserRole.USER));
         assertThrows(ResourceNotFoundException.class, () -> userService.setRoleToUser(100L, UserRole.USER));
     }
 }

@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException ex, WebRequest request){
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException ex, WebRequest request) {
         ErrorResponse message = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now(),
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConnectException.class)
-    public ResponseEntity<ErrorResponse> handleConnectException(ConnectException ex, WebRequest request){
+    public ResponseEntity<ErrorResponse> handleConnectException(ConnectException ex, WebRequest request) {
         ErrorResponse message = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now(),

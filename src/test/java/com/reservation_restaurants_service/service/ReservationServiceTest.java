@@ -134,7 +134,7 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
         //then
- //       assertThrows(ReservationNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
+        //       assertThrows(ReservationNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
         assertThrows(ResourceNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
     }
 
@@ -177,7 +177,6 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentReservation.getId())).thenReturn(false);
         //then
- //       assertThrows(ReservationNotFoundException.class, () -> reservationService.update(nonExistentReservation, nonExistentReservation.getId()));
         assertThrows(ResourceNotFoundException.class, () -> reservationService.update(nonExistentReservation, nonExistentReservation.getId()));
     }
 
@@ -199,7 +198,6 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
         //then
- //       assertThrows(ReservationNotFoundException.class, () -> reservationService.delete(nonExistentId));
         assertThrows(ResourceNotFoundException.class, () -> reservationService.delete(nonExistentId));
     }
 
@@ -251,7 +249,6 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
         //then
- //       assertThrows(ReservationNotFoundException.class, () -> reservationService.setStatusToReservation(nonExistentId, Status.ACTIVE));
         assertThrows(ResourceNotFoundException.class, () -> reservationService.setStatusToReservation(nonExistentId, Status.ACTIVE));
     }
 }

@@ -156,7 +156,6 @@ public class ReviewServiceTest {
         //when
         when(reviewRepository.existsById(nonExistentReview.getId())).thenReturn(false);
         //then
-//        assertThrows(ReviewNotFoundException.class, () -> reviewService.update(nonExistentReview, nonExistentReview.getId()));
         assertThrows(ResourceNotFoundException.class, () -> reviewService.update(nonExistentReview, nonExistentReview.getId()));
     }
 
@@ -178,7 +177,6 @@ public class ReviewServiceTest {
         //when
         when(reviewRepository.existsById(nonExistentId)).thenReturn(false);
         //then
- //       assertThrows(ReviewNotFoundException.class, () -> reviewService.delete(nonExistentId));
         assertThrows(ResourceNotFoundException.class, () -> reviewService.delete(nonExistentId));
     }
 }

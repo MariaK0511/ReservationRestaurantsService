@@ -125,7 +125,6 @@ public class RestaurantServiceTest {
         //when
         when(restaurantRepository.existsById(nonExistentRestaurant.getId())).thenReturn(false);
         //then
-//        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.findRestaurantById(nonExistentRestaurant.getId(), false));
         assertThrows(ResourceNotFoundException.class, () -> restaurantService.findRestaurantById(nonExistentRestaurant.getId(), false));
     }
 
@@ -194,7 +193,6 @@ public class RestaurantServiceTest {
         //when
         when(restaurantRepository.existsById(nonExistentRestaurant.getId())).thenReturn(false);
         //then
-//        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.delete(nonExistentRestaurant.getId()));
         assertThrows(ResourceNotFoundException.class, () -> restaurantService.delete(nonExistentRestaurant.getId()));
     }
 }
