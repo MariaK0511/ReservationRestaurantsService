@@ -6,7 +6,7 @@ import com.reservation_restaurants_service.entity.Review;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
-import com.reservation_restaurants_service.exception.ReviewNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.ReviewRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
@@ -156,7 +156,7 @@ public class ReviewServiceTest {
         //when
         when(reviewRepository.existsById(nonExistentReview.getId())).thenReturn(false);
         //then
-        assertThrows(ReviewNotFoundException.class, () -> reviewService.update(nonExistentReview, nonExistentReview.getId()));
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.update(nonExistentReview, nonExistentReview.getId()));
     }
 
     @Test
@@ -177,6 +177,6 @@ public class ReviewServiceTest {
         //when
         when(reviewRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-        assertThrows(ReviewNotFoundException.class, () -> reviewService.delete(nonExistentId));
+        assertThrows(ResourceNotFoundException.class, () -> reviewService.delete(nonExistentId));
     }
 }

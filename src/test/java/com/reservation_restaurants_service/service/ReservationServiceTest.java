@@ -7,7 +7,7 @@ import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.Status;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
-import com.reservation_restaurants_service.exception.ReservationNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.ReservationRepository;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.repository.UserRepository;
@@ -134,7 +134,8 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-        assertThrows(ReservationNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
+        //       assertThrows(ReservationNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.findReservationById(nonExistentId));
     }
 
     @Test
@@ -176,7 +177,7 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentReservation.getId())).thenReturn(false);
         //then
-        assertThrows(ReservationNotFoundException.class, () -> reservationService.update(nonExistentReservation, nonExistentReservation.getId()));
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.update(nonExistentReservation, nonExistentReservation.getId()));
     }
 
     @Test
@@ -197,7 +198,7 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-        assertThrows(ReservationNotFoundException.class, () -> reservationService.delete(nonExistentId));
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.delete(nonExistentId));
     }
 
     @Test
@@ -248,6 +249,6 @@ class ReservationServiceTest {
         //when
         when(reservationRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-        assertThrows(ReservationNotFoundException.class, () -> reservationService.setStatusToReservation(nonExistentId, Status.ACTIVE));
+        assertThrows(ResourceNotFoundException.class, () -> reservationService.setStatusToReservation(nonExistentId, Status.ACTIVE));
     }
 }

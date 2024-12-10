@@ -4,7 +4,7 @@ import com.reservation_restaurants_service.dto.UserDto;
 import com.reservation_restaurants_service.entity.User;
 import com.reservation_restaurants_service.enums.UserRole;
 import com.reservation_restaurants_service.enums.UserStatus;
-import com.reservation_restaurants_service.exception.UserNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.UserRepository;
 import com.reservation_restaurants_service.service.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +86,7 @@ public class UserServiceTest {
         //when
         when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
         //then
-        assertThrows(UserNotFoundException.class, () -> userService.findUserById(nonExistentId));
+        assertThrows(ResourceNotFoundException.class, () -> userService.findUserById(nonExistentId));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class UserServiceTest {
         //when
         when(userRepository.existsById(nonExistentUser.getId())).thenReturn(false);
         //then
-        assertThrows(UserNotFoundException.class, () -> userService.update(nonExistentUser));
+        assertThrows(ResourceNotFoundException.class, () -> userService.update(nonExistentUser));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class UserServiceTest {
         //when
         when(userRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-        assertThrows(UserNotFoundException.class, () -> userService.delete(nonExistentId));
+        assertThrows(ResourceNotFoundException.class, () -> userService.delete(nonExistentId));
     }
 
     @Test
@@ -176,6 +176,6 @@ public class UserServiceTest {
         //when
         when(userRepository.existsById(nonExistentId)).thenReturn(false);
         //then
-        assertThrows(UserNotFoundException.class, () -> userService.setRoleToUser(100L, UserRole.USER));
+        assertThrows(ResourceNotFoundException.class, () -> userService.setRoleToUser(100L, UserRole.USER));
     }
 }

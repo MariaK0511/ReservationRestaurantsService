@@ -3,7 +3,7 @@ package com.reservation_restaurants_service.service;
 import com.reservation_restaurants_service.dto.RestaurantDto;
 import com.reservation_restaurants_service.dto.WeatherDto;
 import com.reservation_restaurants_service.entity.Restaurant;
-import com.reservation_restaurants_service.exception.RestaurantNotFoundException;
+import com.reservation_restaurants_service.exception.ResourceNotFoundException;
 import com.reservation_restaurants_service.repository.RestaurantRepository;
 import com.reservation_restaurants_service.service.mapper.RestaurantMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -114,7 +114,7 @@ public class RestaurantServiceTest {
         //then
         assertNotNull(foundRestaurantDto);
         assertEquals(1L, foundRestaurantDto.getId());
-        assertNull(weatherDto.getTypeOfWeather());
+        assertNull(weatherDto.getTypeOfWeather()); //is it correct?
     }
 
     @Test
@@ -125,7 +125,7 @@ public class RestaurantServiceTest {
         //when
         when(restaurantRepository.existsById(nonExistentRestaurant.getId())).thenReturn(false);
         //then
-        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.findRestaurantById(nonExistentRestaurant.getId(), false));
+        assertThrows(ResourceNotFoundException.class, () -> restaurantService.findRestaurantById(nonExistentRestaurant.getId(), false));
     }
 
     @Test
@@ -170,7 +170,8 @@ public class RestaurantServiceTest {
         //when
         when(restaurantRepository.existsById(100L)).thenReturn(false);
         //then
-        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.update(nonExistentRestaurant));
+//        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.update(nonExistentRestaurant));
+        assertThrows(ResourceNotFoundException.class, () -> restaurantService.update(nonExistentRestaurant));
     }
 
     @Test
@@ -192,6 +193,6 @@ public class RestaurantServiceTest {
         //when
         when(restaurantRepository.existsById(nonExistentRestaurant.getId())).thenReturn(false);
         //then
-        assertThrows(RestaurantNotFoundException.class, () -> restaurantService.delete(nonExistentRestaurant.getId()));
+        assertThrows(ResourceNotFoundException.class, () -> restaurantService.delete(nonExistentRestaurant.getId()));
     }
 }
